@@ -1,255 +1,476 @@
 import React, { useState } from 'react';
-import { TiltCard } from '../mechanics/TiltCard.tsx';
-import { Download, Copy, Check, Laptop, Cpu, CheckCircle2, Sparkles, ArrowRight, Terminal } from 'lucide-react';
+import { Download, Copy, Check, Terminal, Laptop, CheckCircle2, ArrowRight } from 'lucide-react';
 
-interface InstallOption {
-  id: string;
+interface PrereqItem {
+  os: string;
   label: string;
-  platform: string;
   cmd: string;
-  desc: string;
-  notes: string[];
+  verify: string;
 }
 
-const installOptions: InstallOption[] = [
+const prereqs: PrereqItem[] = [
   {
-    id: 'windows',
-    label: 'Windows (PowerShell 1-Click)',
-    platform: 'Windows 10 / 11 (PowerShell)',
-    cmd: 'irm https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.ps1 | iex',
-    desc: 'One-line automated PowerShell installer that clones, links, and registers the global launch command.',
-    notes: [
-      'Automatically registers global launch command',
-      'Requires Node.js 20+ and FFmpeg (via winget)',
-      'Instant availability in PowerShell & Terminal'
-    ]
+    os: 'windows',
+    label: 'Windows 10 / 11 (PowerShell)',
+    cmd: 'winget install OpenJS.NodeJS.LTS Gyan.FFmpeg Git.Git',
+    verify: 'node -v && ffmpeg -version && git --version'
   },
   {
-    id: 'agent',
-    label: 'Claude Code / Agent Skill',
-    platform: 'AI Coding Agents (Claude Code / Antigravity)',
-    cmd: 'New-Item -ItemType Directory -Force -Path "$HOME\\.claude\\skills\\launch"; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/SadikMohamud/Launch/main/skill/SKILL.md" -OutFile "$HOME\\.claude\\skills\\launch\\SKILL.md"',
-    desc: 'Install the native /launch slash command into Claude Code and Antigravity environments.',
-    notes: [
-      'Enables instant /launch slash command in chat',
-      'Auto-detects current project codebase',
-      'Direct integration with 60fps Hyperframes engine'
-    ]
+    os: 'macos',
+    label: 'macOS (Homebrew)',
+    cmd: 'brew install node ffmpeg git',
+    verify: 'node -v && ffmpeg -version && git --version'
   },
   {
-    id: 'clone',
-    label: 'Git Clone & npm link',
-    platform: 'Cross-Platform (Windows / Mac / Linux)',
-    cmd: 'git clone https://github.com/SadikMohamud/Launch.git && cd Launch && npm install && npm link --force',
-    desc: 'Clone the repository and globally link the binary with zero package registry dependencies.',
-    notes: [
-      'Works in PowerShell, Bash, and zsh',
-      'Links directly to local source tree',
-      'Immediate access to launch command'
-    ]
-  },
-  {
-    id: 'macos',
-    label: 'macOS (1-Line Install)',
-    platform: 'macOS Apple Silicon & Intel',
-    cmd: 'curl -fsSL https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.sh | bash',
-    desc: 'One-line automated installer for macOS with native Apple Silicon acceleration.',
-    notes: [
-      'Native Apple Silicon M1/M2/M3/M4 acceleration',
-      'Bundles global launch command link',
-      'Zero configuration setup'
-    ]
-  },
-  {
-    id: 'linux',
+    os: 'linux',
     label: 'Linux (Ubuntu / Debian / WSL)',
-    platform: 'Linux & WSL2',
+    cmd: 'sudo apt update && sudo apt install -y nodejs npm ffmpeg git',
+    verify: 'node -v && ffmpeg -version && git --version'
+  }
+];
+
+interface InstallMethod {
+  id: string;
+  label: string;
+  osBadge: string;
+  badgeColor: string;
+  cmd: string;
+  desc: string;
+  bullets: string[];
+}
+
+const installMethods: InstallMethod[] = [
+  {
+    id: 'windows-ps',
+    label: 'Windows 1-Click (PowerShell)',
+    osBadge: 'Windows 10 / 11',
+    badgeColor: 'bg-accent-pink text-white',
+    cmd: 'irm https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.ps1 | iex',
+    desc: 'Automated PowerShell installer. Clones the repository to ~/.launch-engine, installs dependencies, and globally registers the launch command.',
+    bullets: [
+      'Works in PowerShell and Windows Terminal',
+      'Automatically registers global launch command',
+      'No manual path configuration needed'
+    ]
+  },
+  {
+    id: 'mac-linux',
+    label: 'macOS & Linux 1-Line',
+    osBadge: 'macOS / Linux / WSL',
+    badgeColor: 'bg-accent-green text-ink-900',
     cmd: 'curl -fsSL https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.sh | bash',
-    desc: 'Automated script for Debian, Ubuntu, and WSL2 environments.',
-    notes: [
-      'Full headless Chromium support',
-      'Hardware GPU acceleration via VA-API / NVENC',
-      'Perfect for CI/CD automated video delivery'
+    desc: 'One-line shell script that clones, installs, and links the global launch executable on Unix-based systems and Apple Silicon.',
+    bullets: [
+      'Native Apple Silicon M1/M2/M3/M4 acceleration',
+      'Full headless Chromium support on Linux',
+      'Sets up global launch binary in your PATH'
+    ]
+  },
+  {
+    id: 'agent-skill',
+    label: 'AI Agent Skill (Claude / AGY)',
+    osBadge: 'Claude Code & Antigravity',
+    badgeColor: 'bg-accent-yellow text-ink-900',
+    cmd: 'New-Item -ItemType Directory -Force -Path "$HOME\\.claude\\skills\\launch"; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/SadikMohamud/Launch/main/skill/SKILL.md" -OutFile "$HOME\\.claude\\skills\\launch\\SKILL.md"',
+    desc: 'Install the native /launch slash command directly into your AI coding assistant workspace.',
+    bullets: [
+      'Enables /launch slash command directly inside chat',
+      'Auto-inspects current project workspace',
+      'Direct integration with the 60fps render engine'
+    ]
+  },
+  {
+    id: 'manual-git',
+    label: 'Manual Git Clone & Link',
+    osBadge: 'Universal (All Platforms)',
+    badgeColor: 'bg-white text-ink-900',
+    cmd: 'git clone https://github.com/SadikMohamud/Launch.git && cd Launch && npm install && npm link --force',
+    desc: 'Standard developer workflow: clone source repository, install local packages, and create global symlink.',
+    bullets: [
+      'Works on any operating system with Node.js',
+      'Direct access to inspect or modify source code',
+      'Forces overwrite of old global binaries'
+    ]
+  }
+];
+
+interface RunExample {
+  id: string;
+  title: string;
+  tag: string;
+  cmd: string;
+  desc: string;
+  outputPreview: string[];
+}
+
+const runExamples: RunExample[] = [
+  {
+    id: 'live-url',
+    title: 'Generate from Live Website URL',
+    tag: 'Web Capture',
+    cmd: 'launch https://kalandula.co.uk',
+    desc: 'Captures live DOM, computes typography and palettes, and outputs a 60fps cinema promo.',
+    outputPreview: [
+      '✓ Capturing live DOM & computed CSSOM tokens from: https://kalandula.co.uk',
+      '✓ Synthesizing GSAP scene choreography & parallax layers',
+      '✓ Hardware GPU master render starting (1920x1080 @ 60fps)...',
+      '★ Delivered: launch-output/launch.mp4 (Settled poster: launch.jpg)'
+    ]
+  },
+  {
+    id: 'local-code',
+    title: 'Generate from Local Codebase',
+    tag: 'Local Repo',
+    cmd: 'launch',
+    desc: 'Run inside any React, Vue, Svelte, or HTML directory to generate an unwatermarked 60fps promo.',
+    outputPreview: [
+      '✓ Reading package.json, source DOM, and computed design tokens',
+      '✓ Extracting authentic UI easing curves & physics parameters',
+      '✓ Deterministic 60fps Chromium composition rendering...',
+      '★ Delivered: launch-output/launch.mp4 · Zero watermarks'
+    ]
+  },
+  {
+    id: 'long-form',
+    title: 'Long-Form Narrative Reel',
+    tag: '30-90s Narrative',
+    cmd: 'launch https://luminaryhouse.co.uk --long',
+    desc: 'Choreographs an extended multi-scene story with dynamic background audio ducking.',
+    outputPreview: [
+      '✓ Synthesizing 6-scene storyboard flow from site structure',
+      '✓ Automated -18dB audio ducking applied to background music bed',
+      '✓ 4K UHD Master render compiled at 60fps',
+      '★ Delivered: launch-output/launch.mp4 (4K 60fps)'
+    ]
+  },
+  {
+    id: 'vertical-reel',
+    title: 'Vertical 9:16 Mobile Reel',
+    tag: 'Social & Reels',
+    cmd: 'launch --format vertical --tone cinematic',
+    desc: 'Outputs a 1080x1920 vertical video optimized for mobile feeds and showcase reels.',
+    outputPreview: [
+      '✓ Viewport configured: 1080x1920 (9:16 vertical ratio)',
+      '✓ Applying cinematic color grading and high-contrast pacing',
+      '✓ Frame 0 settled poster baked with FFmpeg',
+      '★ Delivered: launch-output/vertical-reel.mp4 (15.0s)'
     ]
   }
 ];
 
 export const InstallSection: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('agent');
-  const [copied, setCopied] = useState(false);
+  const [selectedPrereq, setSelectedPrereq] = useState('windows');
+  const [selectedInstall, setSelectedInstall] = useState('windows-ps');
+  const [selectedExample, setSelectedExample] = useState('live-url');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const active = installOptions.find((o) => o.id === selectedTab) || installOptions[0];
+  const activePrereq = prereqs.find((p) => p.os === selectedPrereq) || prereqs[0];
+  const activeInstall = installMethods.find((m) => m.id === selectedInstall) || installMethods[0];
+  const activeExample = runExamples.find((e) => e.id === selectedExample) || runExamples[0];
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(active.cmd);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   return (
-    <div className="space-y-6 sm:space-y-10">
+    <div className="space-y-12 sm:space-y-16">
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4 border-b-2 border-ink-900 dark:border-white/20 pb-5 sm:pb-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-ink-900 dark:border-white/20 pb-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-accent-yellow text-ink-900 font-mono text-xs font-extrabold uppercase tracking-wider mb-2 shadow-hard border-2 border-ink-900">
-            Installation & Setup
+            Installation & Execution Guide
           </div>
           <h2 className="display-medium text-ink-900 dark:text-white">
             How To Install & Run Launch
           </h2>
         </div>
         <p className="text-base sm:text-lg font-bold text-ink-900 dark:text-[#dcd8d5] font-sans max-w-md leading-relaxed">
-          Install as a slash command in your AI coding agent or run globally via npm on any laptop.
+          Follow these 3 verified steps to install the binary globally and start rendering 60fps promo videos.
         </p>
       </div>
 
-      {/* Main Interactive Installation Box */}
-      <div className="bg-[#0c0a09] border-2 sm:border-4 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden shadow-hard-pink">
-        {/* Top Control Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#171412] border-b-2 border-white/20 px-4 sm:px-6 py-3.5 sm:py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex gap-1.5 sm:gap-2">
-              <span className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-accent-pink shadow-sm" />
-              <span className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-accent-yellow shadow-sm" />
-              <span className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-accent-green shadow-sm" />
-            </div>
-            <span className="text-sm sm:text-base font-mono font-extrabold text-white flex items-center gap-2 pl-1 sm:pl-2">
-              <Download className="w-4 h-4 sm:w-5 sm:h-5 text-accent-green" />
-              <span>Platform Setup</span>
-            </span>
+      {/* ─────────────────────────────────────────────────────────────
+          STEP 1: PREREQUISITES
+      ───────────────────────────────────────────────────────────── */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-accent-pink text-white font-mono font-extrabold flex items-center justify-center text-sm shadow-sm">
+            1
           </div>
-
-          <button
-            onClick={handleCopy}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 text-xs sm:text-sm font-mono font-extrabold bg-accent-pink hover:bg-white text-white hover:text-ink-900 px-4 sm:px-5 py-2.5 rounded-pill transition-all shadow-md"
-          >
-            {copied ? (
-              <>
-                <Check className="w-4 h-4 text-accent-green stroke-[3]" />
-                <span className="text-accent-green font-extrabold">Copied Command!</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-4 h-4" />
-                <span>Copy Command</span>
-              </>
-            )}
-          </button>
+          <h3 className="font-sans text-xl sm:text-2xl font-extrabold text-ink-900 dark:text-white">
+            Verify System Prerequisites (Node.js 20+ & FFmpeg)
+          </h3>
         </div>
 
-        {/* Tab Selection */}
-        <div className="flex gap-2 p-3 sm:p-4 bg-[#120f0e] border-b-2 border-white/20 overflow-x-auto scrollbar-none">
-          {installOptions.map((opt) => {
-            const isSelected = selectedTab === opt.id;
-            return (
+        <div className="bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-2xl p-4 sm:p-6 shadow-hard space-y-4">
+          {/* OS Switcher Tabs */}
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+            {prereqs.map((p) => (
               <button
-                key={opt.id}
-                onClick={() => setSelectedTab(opt.id)}
-                className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-pill text-xs sm:text-sm font-mono whitespace-nowrap font-extrabold transition-all border-2 flex-shrink-0 ${
-                  isSelected
-                    ? 'bg-accent-yellow text-ink-900 border-accent-yellow shadow-hard scale-102'
-                    : 'bg-[#221e1d] text-white hover:bg-[#332c2a] border-white/20'
+                key={p.os}
+                onClick={() => setSelectedPrereq(p.os)}
+                className={`px-4 py-2 rounded-pill font-mono text-xs sm:text-sm font-extrabold transition-all border-2 flex-shrink-0 ${
+                  selectedPrereq === p.os
+                    ? 'bg-ink-900 dark:bg-white text-white dark:text-ink-900 border-ink-900 dark:border-white shadow-sm'
+                    : 'bg-white dark:bg-[#25201d] text-ink-900 dark:text-white border-ink-900/20 dark:border-white/10 hover:border-ink-900'
                 }`}
               >
-                {opt.label}
+                {p.label}
               </button>
-            );
-          })}
-        </div>
-
-        {/* Terminal Code Box */}
-        <div className="p-4 sm:p-8 space-y-4 sm:space-y-6">
-          <div className="space-y-1 sm:space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono font-extrabold text-accent-yellow uppercase tracking-wider">
-              <Laptop className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              <span>Target: {active.platform}</span>
-            </div>
-            <p className="text-white text-sm sm:text-base font-bold">
-              {active.desc}
-            </p>
-          </div>
-
-          {/* Code Window with safe horizontal scroll */}
-          <div className="bg-[#050404] border-2 border-white/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 font-mono text-xs sm:text-base text-accent-green font-extrabold leading-relaxed overflow-x-auto shadow-inner">
-            <pre className="whitespace-pre-wrap break-all sm:break-normal">{active.cmd}</pre>
-          </div>
-
-          {/* Feature Notes Checklist */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 pt-2 border-t-2 border-white/10">
-            {active.notes.map((note, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm font-mono font-bold text-white">
-                <CheckCircle2 className="w-4 h-4 text-accent-green flex-shrink-0 mt-0.5" />
-                <span>{note}</span>
-              </div>
             ))}
+          </div>
+
+          {/* Command Snippet */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#0c0a09] border-2 border-ink-900 dark:border-white/20 rounded-xl p-3.5 sm:p-4 text-white font-mono text-xs sm:text-sm">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none">
+              <span className="text-accent-pink font-extrabold">$</span>
+              <span className="text-accent-green font-bold">{activePrereq.cmd}</span>
+            </div>
+            <button
+              onClick={() => handleCopy(activePrereq.cmd, `prereq-${activePrereq.os}`)}
+              className="flex items-center justify-center gap-1.5 bg-accent-pink hover:bg-white text-white hover:text-ink-900 px-3.5 py-1.5 rounded-pill text-xs font-bold transition-all shadow-sm flex-shrink-0"
+            >
+              {copiedId === `prereq-${activePrereq.os}` ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-accent-green stroke-[3]" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-ink-900 dark:text-gray-300 font-semibold pt-1">
+            <span className="font-extrabold text-ink-900 dark:text-white">Verify with:</span>
+            <code className="bg-white dark:bg-[#25201d] px-2 py-0.5 rounded border border-ink-900/20 dark:border-white/20 text-ink-900 dark:text-accent-yellow">
+              {activePrereq.verify}
+            </code>
           </div>
         </div>
       </div>
 
-      {/* 3-Step Quick Start Matrix */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-2 sm:pt-4">
-        <TiltCard spotlightColor="rgba(255, 0, 144, 0.15)" className="h-full rounded-2xl sm:rounded-3xl">
-          <div className="bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-pink transition-shadow duration-300">
-            <div className="space-y-3 sm:space-y-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-accent-pink text-white flex items-center justify-center border-2 border-ink-900 shadow-sm">
-                <Cpu className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+      {/* ─────────────────────────────────────────────────────────────
+          STEP 2: INSTALL LAUNCH (1-LINE AUTOMATED)
+      ───────────────────────────────────────────────────────────── */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-accent-green text-ink-900 font-mono font-extrabold flex items-center justify-center text-sm shadow-sm">
+            2
+          </div>
+          <h3 className="font-sans text-xl sm:text-2xl font-extrabold text-ink-900 dark:text-white">
+            Install Launch Engine Globally (Choose Your Platform)
+          </h3>
+        </div>
+
+        {/* Big Terminal Card */}
+        <div className="bg-[#0c0a09] border-2 sm:border-4 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden shadow-hard-pink">
+          {/* Header Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#171412] border-b-2 border-white/20 px-4 sm:px-6 py-3.5 sm:py-4">
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1.5">
+                <span className="w-3 h-3 rounded-full bg-accent-pink shadow-sm" />
+                <span className="w-3 h-3 rounded-full bg-accent-yellow shadow-sm" />
+                <span className="w-3 h-3 rounded-full bg-accent-green shadow-sm" />
               </div>
-              <h3 className="font-sans font-extrabold text-xl sm:text-2xl text-ink-900 dark:text-white">
-                1. Verify Prerequisites
-              </h3>
-              <p className="text-sm sm:text-base font-semibold text-ink-900 dark:text-[#dcd8d5] leading-relaxed">
-                Ensure Node.js 20+ and FFmpeg are installed. Run <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">node -v</code> and <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">ffmpeg -version</code>.
+              <span className="text-sm sm:text-base font-mono font-extrabold text-white flex items-center gap-2">
+                <Download className="w-4 h-4 text-accent-green" />
+                <span>Global Binary Installer</span>
+              </span>
+            </div>
+
+            <span className={`text-xs font-mono font-extrabold px-3 py-1 rounded-pill uppercase tracking-wider self-start sm:self-auto ${activeInstall.badgeColor}`}>
+              {activeInstall.osBadge}
+            </span>
+          </div>
+
+          {/* Platform Tabs */}
+          <div className="flex gap-2 p-3 sm:p-4 bg-[#120f0e] border-b-2 border-white/20 overflow-x-auto scrollbar-none">
+            {installMethods.map((m) => {
+              const isSelected = selectedInstall === m.id;
+              return (
+                <button
+                  key={m.id}
+                  onClick={() => setSelectedInstall(m.id)}
+                  className={`px-3.5 sm:px-5 py-2 rounded-pill text-xs sm:text-sm font-mono whitespace-nowrap font-extrabold transition-all border-2 flex-shrink-0 ${
+                    isSelected
+                      ? 'bg-accent-yellow text-ink-900 border-accent-yellow shadow-hard scale-102'
+                      : 'bg-[#221e1d] text-white hover:bg-[#332c2a] border-white/20'
+                  }`}
+                >
+                  {m.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Command Body */}
+          <div className="p-4 sm:p-8 space-y-6">
+            <div className="space-y-1">
+              <div className="text-xs font-mono font-extrabold text-accent-yellow uppercase tracking-wider flex items-center gap-2">
+                <Laptop className="w-4 h-4" />
+                <span>Description</span>
+              </div>
+              <p className="text-white text-sm sm:text-base font-bold leading-relaxed">
+                {activeInstall.desc}
               </p>
             </div>
-            <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t-2 border-ink-900/15 dark:border-white/10 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900 dark:text-white">
-              <span>Required</span>
-              <span className="bg-accent-green text-ink-900 px-2.5 sm:px-3 py-1 rounded-pill border-2 border-ink-900">Node 20+ & FFmpeg</span>
+
+            {/* Code Snippet Box */}
+            <div className="bg-[#050404] border-2 border-white/25 rounded-xl sm:rounded-2xl p-4 sm:p-6 relative group">
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 text-xs font-mono text-gray-400">
+                <span>Terminal Command</span>
+                <span className="text-accent-green">100% Tested & Verified</span>
+              </div>
+              <pre className="font-mono text-xs sm:text-base text-accent-green font-extrabold whitespace-pre-wrap break-all leading-relaxed select-all">
+                {activeInstall.cmd}
+              </pre>
+
+              <button
+                onClick={() => handleCopy(activeInstall.cmd, `install-${activeInstall.id}`)}
+                className="mt-4 w-full sm:w-auto flex items-center justify-center gap-2 bg-accent-pink hover:bg-white text-white hover:text-ink-900 px-5 py-2.5 rounded-pill font-mono text-xs sm:text-sm font-extrabold transition-all shadow-md"
+              >
+                {copiedId === `install-${activeInstall.id}` ? (
+                  <>
+                    <Check className="w-4 h-4 text-accent-green stroke-[3]" />
+                    <span className="text-accent-green font-extrabold">Copied Command to Clipboard!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    <span>Copy 1-Line Command</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Checklist */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-white/15">
+              {activeInstall.bullets.map((bullet, idx) => (
+                <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm font-mono text-white font-bold">
+                  <CheckCircle2 className="w-4 h-4 text-accent-green flex-shrink-0 mt-0.5" />
+                  <span>{bullet}</span>
+                </div>
+              ))}
             </div>
           </div>
-        </TiltCard>
+        </div>
+      </div>
 
-        <TiltCard spotlightColor="rgba(0, 255, 102, 0.15)" className="h-full rounded-2xl sm:rounded-3xl">
-          <div className="bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-green transition-shadow duration-300">
-            <div className="space-y-3 sm:space-y-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-accent-green text-ink-900 flex items-center justify-center border-2 border-ink-900 shadow-sm">
-                <Terminal className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
-              </div>
-              <h3 className="font-sans font-extrabold text-xl sm:text-2xl text-ink-900 dark:text-white">
-                2. Run Launch Command
-              </h3>
-              <p className="text-sm sm:text-base font-semibold text-ink-900 dark:text-[#dcd8d5] leading-relaxed">
-                In your project folder or terminal, type <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">/launch</code> or pass a public URL like <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">/launch https://yoursite.com</code>.
-              </p>
-            </div>
-            <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t-2 border-ink-900/15 dark:border-white/10 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900 dark:text-white">
-              <span>Execution</span>
-              <span className="bg-accent-yellow text-ink-900 px-2.5 sm:px-3 py-1 rounded-pill border-2 border-ink-900">&lt; 30s Render</span>
-            </div>
+      {/* ─────────────────────────────────────────────────────────────
+          STEP 3: RUN LAUNCH (HOW TO USE & EXAMPLES)
+      ───────────────────────────────────────────────────────────── */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-accent-yellow text-ink-900 font-mono font-extrabold flex items-center justify-center text-sm shadow-sm">
+            3
           </div>
-        </TiltCard>
+          <h3 className="font-sans text-xl sm:text-2xl font-extrabold text-ink-900 dark:text-white">
+            Run Launch Against Any Website or Local Codebase
+          </h3>
+        </div>
 
-        <TiltCard spotlightColor="rgba(255, 230, 0, 0.15)" className="h-full rounded-2xl sm:rounded-3xl">
-          <div className="bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-yellow transition-shadow duration-300">
-            <div className="space-y-3 sm:space-y-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-accent-yellow text-ink-900 flex items-center justify-center border-2 border-ink-900 shadow-sm">
-                <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+          {/* Example Selector Cards */}
+          <div className="space-y-3 lg:col-span-1">
+            {runExamples.map((ex) => {
+              const isSelected = selectedExample === ex.id;
+              return (
+                <div
+                  key={ex.id}
+                  onClick={() => setSelectedExample(ex.id)}
+                  className={`p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? 'bg-surface dark:bg-[#221e1d] border-ink-900 dark:border-white/40 shadow-hard -translate-y-0.5 ring-2 ring-accent-pink'
+                      : 'bg-white dark:bg-[#181412] border-ink-900/20 dark:border-white/10 hover:border-ink-900 text-ink-900'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-mono font-extrabold px-2.5 py-0.5 rounded-pill bg-accent-yellow text-ink-900 border border-ink-900 shadow-sm">
+                      {ex.tag}
+                    </span>
+                    <ArrowRight className={`w-4 h-4 ${isSelected ? 'text-accent-pink' : 'text-gray-400'}`} />
+                  </div>
+                  <div className="font-sans font-extrabold text-base text-ink-900 dark:text-white">
+                    {ex.title}
+                  </div>
+                  <div className="font-mono text-xs text-ink-900 dark:text-gray-300 font-bold mt-1 truncate">
+                    $ {ex.cmd}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Live Command & Output Viewer */}
+          <div className="lg:col-span-2 bg-[#0c0a09] border-2 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-7 text-white font-mono shadow-hard flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b-2 border-white/20">
+                <div className="flex items-center gap-2 text-xs font-mono font-extrabold text-accent-yellow uppercase tracking-wider">
+                  <Terminal className="w-4 h-4 text-accent-pink" />
+                  <span>Execution Preview</span>
+                </div>
+                <button
+                  onClick={() => handleCopy(activeExample.cmd, `run-${activeExample.id}`)}
+                  className="flex items-center justify-center gap-1.5 bg-accent-pink hover:bg-white text-white hover:text-ink-900 px-4 py-1.5 rounded-pill text-xs font-extrabold transition-all shadow-sm self-start sm:self-auto"
+                >
+                  {copiedId === `run-${activeExample.id}` ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-accent-green stroke-[3]" />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Command</span>
+                    </>
+                  )}
+                </button>
               </div>
-              <h3 className="font-sans font-extrabold text-xl sm:text-2xl text-ink-900 dark:text-white">
-                3. Collect 60fps Master
-              </h3>
-              <p className="text-sm sm:text-base font-semibold text-ink-900 dark:text-[#dcd8d5] leading-relaxed">
-                Your promo video <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">launch.mp4</code> and baked poster <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">launch.jpg</code> are delivered to <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">launch-output/</code>.
+
+              {/* Active Command Line */}
+              <div className="bg-[#181412] border-2 border-white/20 p-3.5 rounded-xl flex items-center gap-2.5">
+                <span className="text-accent-pink font-extrabold text-base select-none">$</span>
+                <span className="text-white font-extrabold text-sm sm:text-base">{activeExample.cmd}</span>
+              </div>
+
+              <p className="text-xs sm:text-sm font-sans font-bold text-gray-300">
+                {activeExample.desc}
               </p>
+
+              {/* Simulated Output Lines */}
+              <div className="bg-[#050404] border border-white/20 rounded-xl p-4 space-y-2.5 text-xs sm:text-sm">
+                <div className="text-[11px] text-gray-500 uppercase tracking-wider border-b border-white/10 pb-1 font-bold">
+                  Standard Output Stream
+                </div>
+                {activeExample.outputPreview.map((line, idx) => {
+                  const isDelivered = line.startsWith('★ Delivered');
+                  return (
+                    <div
+                      key={idx}
+                      className={isDelivered ? 'text-accent-green font-extrabold pt-1' : 'text-gray-300 font-medium'}
+                    >
+                      {line}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t-2 border-ink-900/15 dark:border-white/10 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900 dark:text-white">
-              <span>Deliverable</span>
-              <span className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-2.5 sm:px-3 py-1 rounded-pill border-2 border-ink-900 dark:border-white/20 flex items-center gap-1">
-                <span>Zero Watermark</span>
-                <ArrowRight className="w-3.5 h-3.5 text-accent-pink" />
+
+            {/* Target Delivery Callout */}
+            <div className="pt-3 border-t border-white/15 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <span className="text-gray-400 font-bold">Output Location:</span>
+              <span className="bg-white/10 text-accent-yellow px-3 py-1 rounded-pill border border-white/20 font-extrabold">
+                📁 ./launch-output/launch.mp4
               </span>
             </div>
           </div>
-        </TiltCard>
+        </div>
       </div>
     </div>
   );

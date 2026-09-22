@@ -1,31 +1,110 @@
 import React from 'react';
+import { ShieldCheck, Lock, ExternalLink } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="border-t-2 border-ink-900 dark:border-white/20 bg-surface dark:bg-[#100e0d] py-8 sm:py-12 px-4 sm:px-6 mt-16 sm:mt-28 transition-colors duration-200">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6 text-xs sm:text-sm font-mono font-extrabold text-ink-900 dark:text-white text-center md:text-left">
-        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5 sm:gap-3">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-accent-pink text-white flex items-center justify-center font-extrabold text-sm sm:text-base shadow-hard">
-            /
+    <footer className="border-t-2 border-ink-900 dark:border-white/20 bg-surface dark:bg-[#100e0d] py-10 sm:py-16 px-4 sm:px-6 mt-16 sm:mt-28 transition-colors duration-200">
+      <div className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
+        {/* Main Footer Header */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b-2 border-ink-900/15 dark:border-white/10 text-center md:text-left">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 rounded-xl bg-accent-pink text-white flex items-center justify-center font-extrabold font-mono text-xl shadow-hard">
+              /
+            </div>
+            <div>
+              <div className="flex items-center justify-center md:justify-start gap-2">
+                <span className="font-extrabold text-ink-900 dark:text-white font-sans text-xl sm:text-2xl tracking-tight">
+                  Launch Engine
+                </span>
+                <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-pill bg-accent-yellow text-ink-900 font-extrabold uppercase tracking-wider border border-ink-900">
+                  v1.0.0
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-ink-900 dark:text-gray-300 font-medium mt-0.5">
+                Deterministic 60fps Cinema Promo Video Engine for Web Applications
+              </p>
+            </div>
           </div>
-          <span className="font-extrabold text-ink-900 dark:text-white font-sans text-base sm:text-lg">Launch</span>
-          <span className="text-ink-900 dark:text-gray-400">&middot;</span>
-          <span className="text-xs sm:text-sm text-ink-900 dark:text-gray-300">Cinema Video Engine for Web Projects</span>
+
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-mono font-extrabold">
+            <span className="bg-white dark:bg-[#1f1c1a] text-ink-900 dark:text-white px-3 py-1.5 rounded-pill border-2 border-ink-900 dark:border-white/20 shadow-sm">
+              60 FPS Master
+            </span>
+            <span className="bg-white dark:bg-[#1f1c1a] text-ink-900 dark:text-white px-3 py-1.5 rounded-pill border-2 border-ink-900 dark:border-white/20 shadow-sm">
+              GPU Accelerated
+            </span>
+            <span className="bg-accent-green text-ink-900 px-3 py-1.5 rounded-pill border-2 border-ink-900 shadow-sm">
+              Zero Watermarks
+            </span>
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-          <span className="text-ink-900 dark:text-gray-300 font-bold text-xs sm:text-sm">Deterministic 60fps &middot; Zero Watermarks</span>
-          <a
-            href="https://github.com/SadikMohamud"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-ink-900 dark:text-white hover:text-accent-pink dark:hover:text-accent-pink transition-colors font-extrabold underline underline-offset-4 text-sm sm:text-base"
-          >
-            Snurm
-          </a>
+        {/* Proprietary Licence & Legal Notice Block */}
+        <div className="bg-white dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-2xl p-6 sm:p-8 shadow-hard dark:shadow-none space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-ink-900/10 dark:border-white/10 pb-4">
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm font-mono font-extrabold text-ink-900 dark:text-white uppercase tracking-wider">
+              <ShieldCheck className="w-5 h-5 text-accent-pink flex-shrink-0" />
+              <span>Proprietary Software Licence & Copyright Notice</span>
+            </div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-extrabold text-accent-pink bg-accent-pink/10 px-3 py-1 rounded-pill self-start sm:self-auto">
+              <Lock className="w-3.5 h-3.5" />
+              <span>Commercial Licence</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm leading-relaxed text-ink-900 dark:text-gray-300 font-medium">
+            <div className="space-y-2">
+              <p className="font-bold text-ink-900 dark:text-white">
+                &copy; {new Date().getFullYear()} Launch Engine. All Rights Reserved.
+              </p>
+              <p>
+                This software, its underlying rendering pipeline, motion choreography algorithms, style extraction routines, and associated assets are proprietary intellectual property.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <p className="font-bold text-ink-900 dark:text-white">
+                Usage & Legal Restrictions:
+              </p>
+              <p>
+                Unauthorised reproduction, public redistribution, sublicensing, or reverse engineering of the core source code is strictly prohibited without explicit written authorisation. Videos generated by licensed users remain 100% royalty-free and unwatermarked.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Credits */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm font-mono font-bold text-ink-900 dark:text-gray-400 text-center sm:text-left pt-2">
+          <div>
+            Architected & Engineered by{' '}
+            <a
+              href="https://github.com/SadikMohamud"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ink-900 dark:text-white hover:text-accent-pink dark:hover:text-accent-pink font-extrabold underline underline-offset-4 transition-colors"
+            >
+              Snurm
+            </a>
+          </div>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://github.com/SadikMohamud/Launch"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-accent-pink dark:hover:text-white transition-colors flex items-center gap-1"
+            >
+              <span>GitHub Repository</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+            <span>&middot;</span>
+            <a
+              href="#install"
+              className="hover:text-accent-pink dark:hover:text-white transition-colors"
+            >
+              Install Guide
+            </a>
+          </div>
         </div>
       </div>
     </footer>
   );
 };
-
