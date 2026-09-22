@@ -41,29 +41,29 @@ interface InstallMethod {
 
 const installMethods: InstallMethod[] = [
   {
-    id: 'windows-ps',
-    label: 'Windows 1-Click (PowerShell)',
-    osBadge: 'Windows 10 / 11',
+    id: 'licensed-clone',
+    label: 'Authorized Git Clone & Link',
+    osBadge: 'Universal (Windows / Mac / Linux)',
     badgeColor: 'bg-accent-pink text-white',
-    cmd: 'irm https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.ps1 | iex',
-    desc: 'Automated PowerShell installer. Clones the repository to ~/.launch-engine, installs dependencies, and globally registers the launch command.',
+    cmd: 'git clone https://github.com/SadikMohamud/Launch.git && cd Launch && npm install && npm link --force',
+    desc: 'For authorized users with private repository access. Clones the source tree, installs dependencies, and links the global launch executable.',
     bullets: [
-      'Works in PowerShell and Windows Terminal',
-      'Automatically registers global launch command',
-      'No manual path configuration needed'
+      'Registers global launch command across all terminals',
+      'Requires GitHub authorization or Personal Access Token',
+      'Supports Windows PowerShell, macOS, and Linux'
     ]
   },
   {
-    id: 'mac-linux',
-    label: 'macOS & Linux 1-Line',
-    osBadge: 'macOS / Linux / WSL',
+    id: 'gh-cli',
+    label: 'GitHub CLI (1-Click Auth)',
+    osBadge: 'All Platforms via gh',
     badgeColor: 'bg-accent-green text-ink-900',
-    cmd: 'curl -fsSL https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.sh | bash',
-    desc: 'One-line shell script that clones, installs, and links the global launch executable on Unix-based systems and Apple Silicon.',
+    cmd: 'gh repo clone SadikMohamud/Launch && cd Launch && npm install && npm link --force',
+    desc: 'Clone using the GitHub CLI (gh) with automated OAuth authentication for private repositories.',
     bullets: [
-      'Native Apple Silicon M1/M2/M3/M4 acceleration',
-      'Full headless Chromium support on Linux',
-      'Sets up global launch binary in your PATH'
+      'Uses existing GitHub CLI credentials',
+      'Zero manual token entry required',
+      'Globally links launch command in one pass'
     ]
   },
   {
@@ -71,8 +71,8 @@ const installMethods: InstallMethod[] = [
     label: 'AI Agent Skill (Claude / AGY)',
     osBadge: 'Claude Code & Antigravity',
     badgeColor: 'bg-accent-yellow text-ink-900',
-    cmd: 'New-Item -ItemType Directory -Force -Path "$HOME\\.claude\\skills\\launch"; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/SadikMohamud/Launch/main/skill/SKILL.md" -OutFile "$HOME\\.claude\\skills\\launch\\SKILL.md"',
-    desc: 'Install the native /launch slash command directly into your AI coding assistant workspace.',
+    cmd: '# Inside your cloned Launch directory:\n# Windows (PowerShell):\nNew-Item -ItemType Directory -Force -Path "$HOME\\.claude\\skills\\launch"; Copy-Item .\\skill\\SKILL.md "$HOME\\.claude\\skills\\launch\\SKILL.md"\n\n# macOS / Linux (Bash):\nmkdir -p ~/.claude/skills/launch && cp ./skill/SKILL.md ~/.claude/skills/launch/SKILL.md',
+    desc: 'Install the native /launch slash command into your AI coding assistant from the repository.',
     bullets: [
       'Enables /launch slash command directly inside chat',
       'Auto-inspects current project workspace',
@@ -80,16 +80,16 @@ const installMethods: InstallMethod[] = [
     ]
   },
   {
-    id: 'manual-git',
-    label: 'Manual Git Clone & Link',
-    osBadge: 'Universal (All Platforms)',
+    id: 'local-script',
+    label: 'Local Automated Script',
+    osBadge: 'PowerShell / Bash Script',
     badgeColor: 'bg-white text-ink-900',
-    cmd: 'git clone https://github.com/SadikMohamud/Launch.git && cd Launch && npm install && npm link --force',
-    desc: 'Standard developer workflow: clone source repository, install local packages, and create global symlink.',
+    cmd: '# Windows (PowerShell):\n.\\install.ps1\n\n# macOS / Linux (Bash):\nchmod +x install.sh && ./install.sh',
+    desc: 'Run the included automated setup script inside the cloned Launch repository folder.',
     bullets: [
-      'Works on any operating system with Node.js',
-      'Direct access to inspect or modify source code',
-      'Forces overwrite of old global binaries'
+      'Runs dependency auditing and build preflights',
+      'Registers and links global binary automatically',
+      'Verifies Node.js 20+ and FFmpeg versions'
     ]
   }
 ];
@@ -160,7 +160,7 @@ const runExamples: RunExample[] = [
 
 export const InstallSection: React.FC = () => {
   const [selectedPrereq, setSelectedPrereq] = useState('windows');
-  const [selectedInstall, setSelectedInstall] = useState('windows-ps');
+  const [selectedInstall, setSelectedInstall] = useState('licensed-clone');
   const [selectedExample, setSelectedExample] = useState('live-url');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
