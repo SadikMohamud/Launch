@@ -17,9 +17,9 @@ interface FeatureCard {
 const features: FeatureCard[] = [
   {
     tag: 'Design Extraction',
-    badgeColor: 'bg-accent-pink text-white shadow-hard-pink',
-    spotlightColor: 'rgba(255, 0, 144, 0.12)',
-    shadowHover: 'hover:shadow-hard-pink',
+    badgeColor: 'bg-accent-yellow text-ink-900 border-2 border-ink-900 shadow-sm',
+    spotlightColor: 'rgba(255, 230, 0, 0.12)',
+    shadowHover: 'hover:shadow-hard-yellow',
     title: 'Automated Style & Palette Extraction',
     desc: 'Analyzes computed CSSOM and DOM style trees to extract exact colour palettes, typographic scales, font stacks, and layout geometry directly from your codebase.',
     icon: Layers,
@@ -28,7 +28,7 @@ const features: FeatureCard[] = [
   },
   {
     tag: 'Motion Physics',
-    badgeColor: 'bg-accent-green text-ink-900 shadow-hard-green',
+    badgeColor: 'bg-accent-green text-ink-900 border-2 border-ink-900 shadow-sm',
     spotlightColor: 'rgba(0, 255, 102, 0.12)',
     shadowHover: 'hover:shadow-hard-green',
     title: 'True Cubic-Bezier Motion Choreography',
@@ -39,9 +39,9 @@ const features: FeatureCard[] = [
   },
   {
     tag: 'Local Pipeline',
-    badgeColor: 'bg-accent-yellow text-ink-900 shadow-hard-yellow',
-    spotlightColor: 'rgba(255, 230, 0, 0.12)',
-    shadowHover: 'hover:shadow-hard-yellow',
+    badgeColor: 'bg-white text-ink-900 border-2 border-ink-900 shadow-sm',
+    spotlightColor: 'rgba(255, 0, 144, 0.12)',
+    shadowHover: 'hover:shadow-hard-pink',
     title: 'Deterministic 60fps Master Rendering',
     desc: 'Frame-accurate Chromium renderer running locally with hardware GPU acceleration. Renders crystal-clear 1080p and 4K masters without dropped frames.',
     icon: Cpu,
@@ -50,9 +50,9 @@ const features: FeatureCard[] = [
   },
   {
     tag: 'Multi-Aspect',
-    badgeColor: 'bg-accent-pink text-white shadow-hard-pink',
-    spotlightColor: 'rgba(255, 0, 144, 0.12)',
-    shadowHover: 'hover:shadow-hard-pink',
+    badgeColor: 'bg-accent-yellow text-ink-900 border-2 border-ink-900 shadow-sm',
+    spotlightColor: 'rgba(255, 230, 0, 0.12)',
+    shadowHover: 'hover:shadow-hard-yellow',
     title: 'Multi-Aspect Ratio Output Matrix',
     desc: 'Render in 16:9 Landscape for web showcases, 9:16 Vertical for mobile reels and social feeds, or 1:1 Square in a single unified pipeline pass.',
     icon: Film,
@@ -61,7 +61,7 @@ const features: FeatureCard[] = [
   },
   {
     tag: 'Instant Load',
-    badgeColor: 'bg-accent-green text-ink-900 shadow-hard-green',
+    badgeColor: 'bg-accent-green text-ink-900 border-2 border-ink-900 shadow-sm',
     spotlightColor: 'rgba(0, 255, 102, 0.12)',
     shadowHover: 'hover:shadow-hard-green',
     title: 'Frame-0 Baked Poster Engine',
@@ -72,9 +72,9 @@ const features: FeatureCard[] = [
   },
   {
     tag: 'Audio Engine',
-    badgeColor: 'bg-accent-yellow text-ink-900 shadow-hard-yellow',
-    spotlightColor: 'rgba(255, 230, 0, 0.12)',
-    shadowHover: 'hover:shadow-hard-yellow',
+    badgeColor: 'bg-white text-ink-900 border-2 border-ink-900 shadow-sm',
+    spotlightColor: 'rgba(255, 0, 144, 0.12)',
+    shadowHover: 'hover:shadow-hard-pink',
     title: 'Dynamic Audio Beds & Voiceover Carving',
     desc: 'Automated track gain control, volume envelopes, and dynamic ducking to balance background music cleanly behind voice narration.',
     icon: Sliders,
@@ -114,7 +114,7 @@ export const FeaturesGrid: React.FC = () => {
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <span className={`text-xs font-mono font-extrabold px-3.5 py-1.5 rounded-pill border-2 border-ink-900 ${f.badgeColor}`}>
+                    <span className={`text-xs font-mono font-extrabold px-3.5 py-1.5 rounded-pill ${f.badgeColor}`}>
                       {f.tag}
                     </span>
                     <div className="w-12 h-12 rounded-2xl bg-white border-2 border-ink-900 flex items-center justify-center text-ink-900 shadow-sm">
