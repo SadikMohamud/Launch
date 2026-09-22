@@ -7,6 +7,7 @@ import { SplitReveal } from './mechanics/SplitReveal.tsx';
 import { Navbar } from './components/Navbar.tsx';
 import { MarqueeTicker } from './components/MarqueeTicker.tsx';
 import { VideoTheater } from './components/VideoTheater.tsx';
+import { InstallSection } from './components/InstallSection.tsx';
 import { FeaturesGrid } from './components/FeaturesGrid.tsx';
 import { WorkflowSection } from './components/WorkflowSection.tsx';
 import { CliSimulator } from './components/CliSimulator.tsx';
@@ -91,7 +92,7 @@ export const App: React.FC = () => {
             </MagneticButton>
 
             <a
-              href="#cli"
+              href="#install"
               className="px-8 py-4 rounded-pill font-mono text-base font-extrabold text-ink-900 bg-surface hover:bg-white border-2 border-ink-900 transition-all shadow-hard"
             >
               $ /launch --help
@@ -144,6 +145,11 @@ export const App: React.FC = () => {
           </div>
 
           <VideoTheater />
+        </section>
+
+        {/* Dedicated Installation & Setup Section */}
+        <section id="install" className="max-w-6xl mx-auto px-6 scroll-mt-24">
+          <InstallSection />
         </section>
 
         {/* Engine Features Grid */}

@@ -27,6 +27,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onWatchClick }) => {
         <div className="flex items-center gap-6">
           <nav className="hidden md:flex items-center gap-6 text-sm font-mono font-bold text-ink-900">
             <a href="#showcase" className="hover:text-accent-pink transition-colors">Showcase</a>
+            <a href="#install" className="hover:text-accent-pink transition-colors">Install</a>
             <a href="#features" className="hover:text-accent-pink transition-colors">Features</a>
             <a href="#workflow" className="hover:text-accent-pink transition-colors">Workflow</a>
             <a href="#cli" className="hover:text-accent-pink transition-colors">CLI</a>
