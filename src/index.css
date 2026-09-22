@@ -1,0 +1,84 @@
+@import '@fontsource-variable/hanken-grotesk';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --colour-canvas: #ffffff;
+  --colour-surface: #faf8f4;
+  --colour-text: #0d0b0a;
+  --colour-accent-pink: #ff0090;
+  --colour-accent-green: #00ff66;
+  --colour-accent-yellow: #ffe600;
+  --colour-border: #d5d2cf;
+}
+
+body {
+  margin: 0;
+  font-family: 'Hanken Grotesk Variable', system-ui, -apple-system, sans-serif;
+  background-color: #ffffff;
+  color: #0d0b0a;
+  overflow-x: hidden;
+  letter-spacing: -0.015em;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom crisp scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #faf8f4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0d0b0a;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff0090;
+}
+
+/* High-Impact Kinetic Typography */
+.display-huge {
+  font-size: clamp(3.2rem, 9.5vw, 8.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  font-weight: 800;
+}
+
+.display-large {
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+}
+
+.display-medium {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
