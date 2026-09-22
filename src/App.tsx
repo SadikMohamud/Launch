@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Lenis from 'lenis';
 import { HugeCanvas } from './mechanics/HugeCanvas.tsx';
 import { MagneticButton } from './mechanics/MagneticButton.tsx';
@@ -14,9 +14,11 @@ import { CliSimulator } from './components/CliSimulator.tsx';
 import { FaqSection } from './components/FaqSection.tsx';
 import { CtaSection } from './components/CtaSection.tsx';
 import { Footer } from './components/Footer.tsx';
+import { ReadmeModal } from './components/ReadmeModal.tsx';
 import { Film, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const [readmeOpen, setReadmeOpen] = useState(false);
   useEffect(() => {
     // Only initialize smooth scroll on non-touch devices or smooth mobile momentum
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -55,7 +57,7 @@ export const App: React.FC = () => {
       <HugeCanvas />
 
       {/* Main Studio Navbar with Mobile Menu */}
-      <Navbar onWatchClick={scrollToShowcase} />
+      <Navbar onWatchClick={scrollToShowcase} onOpenReadme={() => setReadmeOpen(true)} />
 
       {/* Main Content Area */}
       <main className="space-y-16 sm:space-y-28 flex-grow w-full">
@@ -198,7 +200,10 @@ export const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <Footer />
+      <Footer onOpenReadme={() => setReadmeOpen(true)} />
+
+      {/* Public README & Documentation Modal */}
+      <ReadmeModal isOpen={readmeOpen} onClose={() => setReadmeOpen(false)} />
     </div>
   );
 };

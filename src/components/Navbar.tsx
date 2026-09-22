@@ -5,9 +5,10 @@ import { Play, Menu, X, ArrowRight } from 'lucide-react';
 
 interface NavbarProps {
   onWatchClick: () => void;
+  onOpenReadme?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onWatchClick }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onWatchClick, onOpenReadme }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Close mobile menu on resize
@@ -34,8 +35,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onWatchClick }) => {
     onWatchClick();
   };
 
+  const handleOpenDocs = () => {
+    setMobileMenuOpen(false);
+    if (onOpenReadme) onOpenReadme();
+  };
+
   return (
-    <header className="border-b-2 border-ink-900 dark:border-white/20 bg-white/95 dark:bg-[#0c0a09]/95 backdrop-blur-xl sticky top-0 z-50 transition-colors duration-200">
+    <header className="border-b-2 border-ink-900 dark:border-white/20 bg-white/95 dark:bg-[#0c0a09]/95 backdrop-blur-xl sticky top-0 z-40 transition-colors duration-200">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
         {/* Brand Logo */}
         <div className="flex items-center gap-2.5 sm:gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -61,6 +67,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onWatchClick }) => {
             <a href="#workflow" className="hover:text-accent-pink dark:hover:text-accent-pink transition-colors">Workflow</a>
             <a href="#cli" className="hover:text-accent-pink dark:hover:text-accent-pink transition-colors">CLI</a>
             <a href="#faq" className="hover:text-accent-pink dark:hover:text-accent-pink transition-colors">FAQ</a>
+            {onOpenReadme && (
+              <button
+                onClick={onOpenReadme}
+                className="text-accent-pink hover:text-accent-pink/80 transition-colors font-extrabold cursor-pointer"
+              >
+                README
+              </button>
+            )}
           </nav>
 
           {/* Theme Switcher */}
@@ -145,6 +159,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onWatchClick }) => {
               <span>Frequently Asked Questions</span>
               <ArrowRight className="w-4 h-4 text-accent-pink" />
             </button>
+            {onOpenReadme && (
+              <button
+                onClick={handleOpenDocs}
+                className="flex items-center justify-between p-3 rounded-xl bg-accent-pink text-white border-2 border-ink-900 dark:border-white/20 shadow-sm text-left"
+              >
+                <span>Open Full README / Docs</span>
+                <ArrowRight className="w-4 h-4 text-accent-yellow" />
+              </button>
+            )}
           </nav>
 
           <div className="pt-2 flex flex-col gap-3">

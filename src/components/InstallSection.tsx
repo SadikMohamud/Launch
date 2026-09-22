@@ -41,29 +41,29 @@ interface InstallMethod {
 
 const installMethods: InstallMethod[] = [
   {
-    id: 'licensed-clone',
-    label: 'Authorized Git Clone & Link',
-    osBadge: 'Universal (Windows / Mac / Linux)',
+    id: 'windows-direct',
+    label: 'Windows 1-Click (PowerShell)',
+    osBadge: 'Windows 10 / 11',
     badgeColor: 'bg-accent-pink text-white',
-    cmd: 'git clone https://github.com/SadikMohamud/Launch.git && cd Launch && npm install && npm link --force',
-    desc: 'For authorized users with private repository access. Clones the source tree, installs dependencies, and links the global launch executable.',
+    cmd: 'irm https://launch-ouzf.vercel.app/install.ps1 | iex',
+    desc: 'Direct automated PowerShell installer hosted on the Launch Engine platform. Sets up ~/.launch-engine and links the global launch command.',
     bullets: [
-      'Registers global launch command across all terminals',
-      'Requires GitHub authorization or Personal Access Token',
-      'Supports Windows PowerShell, macOS, and Linux'
+      'Works in PowerShell and Windows Terminal',
+      'Zero GitHub credentials or public repo access required',
+      'Instant global registration of launch command'
     ]
   },
   {
-    id: 'gh-cli',
-    label: 'GitHub CLI (1-Click Auth)',
-    osBadge: 'All Platforms via gh',
+    id: 'unix-direct',
+    label: 'macOS & Linux (1-Line)',
+    osBadge: 'macOS / Linux / WSL',
     badgeColor: 'bg-accent-green text-ink-900',
-    cmd: 'gh repo clone SadikMohamud/Launch && cd Launch && npm install && npm link --force',
-    desc: 'Clone using the GitHub CLI (gh) with automated OAuth authentication for private repositories.',
+    cmd: 'curl -fsSL https://launch-ouzf.vercel.app/install.sh | bash',
+    desc: 'Direct automated shell script for Apple Silicon, macOS, Ubuntu, Debian, and WSL2 environments.',
     bullets: [
-      'Uses existing GitHub CLI credentials',
-      'Zero manual token entry required',
-      'Globally links launch command in one pass'
+      'Native Apple Silicon M1/M2/M3/M4 acceleration',
+      'Full headless Chromium support on Linux',
+      'Instant global binary availability in your PATH'
     ]
   },
   {
@@ -71,8 +71,8 @@ const installMethods: InstallMethod[] = [
     label: 'AI Agent Skill (Claude / AGY)',
     osBadge: 'Claude Code & Antigravity',
     badgeColor: 'bg-accent-yellow text-ink-900',
-    cmd: '# Inside your cloned Launch directory:\n# Windows (PowerShell):\nNew-Item -ItemType Directory -Force -Path "$HOME\\.claude\\skills\\launch"; Copy-Item .\\skill\\SKILL.md "$HOME\\.claude\\skills\\launch\\SKILL.md"\n\n# macOS / Linux (Bash):\nmkdir -p ~/.claude/skills/launch && cp ./skill/SKILL.md ~/.claude/skills/launch/SKILL.md',
-    desc: 'Install the native /launch slash command into your AI coding assistant from the repository.',
+    cmd: '# Windows (PowerShell):\nNew-Item -ItemType Directory -Force -Path "$HOME\\.claude\\skills\\launch"; Invoke-WebRequest -Uri "https://launch-ouzf.vercel.app/SKILL.md" -OutFile "$HOME\\.claude\\skills\\launch\\SKILL.md"\n\n# macOS / Linux (Bash):\nmkdir -p ~/.claude/skills/launch && curl -fsSL https://launch-ouzf.vercel.app/SKILL.md -o ~/.claude/skills/launch/SKILL.md',
+    desc: 'Install the native /launch slash command directly into your AI coding assistant.',
     bullets: [
       'Enables /launch slash command directly inside chat',
       'Auto-inspects current project workspace',
@@ -80,16 +80,16 @@ const installMethods: InstallMethod[] = [
     ]
   },
   {
-    id: 'local-script',
-    label: 'Local Automated Script',
-    osBadge: 'PowerShell / Bash Script',
+    id: 'licensed-clone',
+    label: 'Private Git Clone & Link',
+    osBadge: 'Authorized Developers',
     badgeColor: 'bg-white text-ink-900',
-    cmd: '# Windows (PowerShell):\n.\\install.ps1\n\n# macOS / Linux (Bash):\nchmod +x install.sh && ./install.sh',
-    desc: 'Run the included automated setup script inside the cloned Launch repository folder.',
+    cmd: 'git clone https://github.com/SadikMohamud/Launch.git && cd Launch && npm install && npm link --force',
+    desc: 'For authorized team members and licensed developers with private GitHub repository access.',
     bullets: [
-      'Runs dependency auditing and build preflights',
-      'Registers and links global binary automatically',
-      'Verifies Node.js 20+ and FFmpeg versions'
+      'Clones complete proprietary source repository',
+      'Direct access to inspect and modify engine code',
+      'Links global binary across your local environment'
     ]
   }
 ];
@@ -160,7 +160,7 @@ const runExamples: RunExample[] = [
 
 export const InstallSection: React.FC = () => {
   const [selectedPrereq, setSelectedPrereq] = useState('windows');
-  const [selectedInstall, setSelectedInstall] = useState('licensed-clone');
+  const [selectedInstall, setSelectedInstall] = useState('windows-direct');
   const [selectedExample, setSelectedExample] = useState('live-url');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 

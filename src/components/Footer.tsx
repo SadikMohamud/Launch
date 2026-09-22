@@ -1,7 +1,11 @@
 import React from 'react';
-import { ShieldCheck, Lock, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Lock, BookOpen } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenReadme?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenReadme }) => {
   return (
     <footer className="border-t-2 border-ink-900 dark:border-white/20 bg-surface dark:bg-[#100e0d] py-10 sm:py-16 px-4 sm:px-6 mt-16 sm:mt-28 transition-colors duration-200">
       <div className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
@@ -55,7 +59,7 @@ export const Footer: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm leading-relaxed text-ink-900 dark:text-gray-300 font-medium">
             <div className="space-y-2">
               <p className="font-bold text-ink-900 dark:text-white">
-                &copy; {new Date().getFullYear()} Launch Engine. All Rights Reserved.
+                &copy; {new Date().getFullYear()} Launch Engine by Snurm. All Rights Reserved.
               </p>
               <p>
                 This software, its underlying rendering pipeline, motion choreography algorithms, style extraction routines, and associated assets are proprietary intellectual property.
@@ -72,7 +76,7 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Credits */}
+        {/* Bottom Credits & Documentation Trigger */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm font-mono font-bold text-ink-900 dark:text-gray-400 text-center sm:text-left pt-2">
           <div>
             Architected & Engineered by{' '}
@@ -85,20 +89,21 @@ export const Footer: React.FC = () => {
               Snurm
             </a>
           </div>
+
           <div className="flex items-center gap-4">
-            <a
-              href="https://github.com/SadikMohamud/Launch"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-accent-pink dark:hover:text-white transition-colors flex items-center gap-1"
-            >
-              <span>GitHub Repository</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+            {onOpenReadme && (
+              <button
+                onClick={onOpenReadme}
+                className="inline-flex items-center gap-1.5 text-accent-pink hover:text-ink-900 dark:hover:text-white font-extrabold underline underline-offset-4 transition-colors cursor-pointer"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>Public Documentation / README</span>
+              </button>
+            )}
             <span>&middot;</span>
             <a
               href="#install"
-              className="hover:text-accent-pink dark:hover:text-white transition-colors"
+              className="hover:text-accent-pink dark:hover:text-white transition-colors font-extrabold"
             >
               Install Guide
             </a>

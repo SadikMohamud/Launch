@@ -1,0 +1,8 @@
+{
+  "name": "launch-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "launch": "./bin/launch.js"
+  }
+}
