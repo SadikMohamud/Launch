@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 interface TiltCardProps {
   children: React.ReactNode;
@@ -17,9 +17,15 @@ export const TiltCard: React.FC<TiltCardProps> = ({
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    setIsTouchDevice(isTouch);
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (isTouchDevice || !cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -35,10 +41,12 @@ export const TiltCard: React.FC<TiltCardProps> = ({
   };
 
   const handleMouseEnter = () => {
+    if (isTouchDevice) return;
     setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
+    if (isTouchDevice) return;
     setIsHovered(false);
     setTilt({ x: 0, y: 0 });
   };
@@ -51,13 +59,13 @@ export const TiltCard: React.FC<TiltCardProps> = ({
       onMouseLeave={handleMouseLeave}
       className={`relative transition-transform duration-300 ease-out will-change-transform ${className}`}
       style={{
-        transform: isHovered
+        transform: !isTouchDevice && isHovered
           ? `perspective(1000px) rotateX(${tilt.x.toFixed(2)}deg) rotateY(${tilt.y.toFixed(2)}deg) translateY(-4px)`
           : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)',
       }}
     >
-      {/* Radial Spotlight Follower */}
-      {isHovered && (
+      {/* Radial Spotlight Follower on Desktop */}
+      {!isTouchDevice && isHovered && (
         <div
           className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300 z-10 overflow-hidden"
           style={{

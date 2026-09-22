@@ -17,52 +17,54 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onWatchClick }) => {
   };
 
   return (
-    <section className="bg-[#0c0a09] border-4 border-ink-900 rounded-3xl p-8 sm:p-14 text-white shadow-hard-pink relative overflow-hidden my-12">
+    <section className="bg-[#0c0a09] border-2 sm:border-4 border-ink-900 rounded-2xl sm:rounded-3xl p-6 sm:p-14 text-white shadow-hard-pink relative overflow-hidden my-8 sm:my-12">
       {/* Background Decorative Light Sheen */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-pink/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent-green/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-accent-pink/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-accent-green/15 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-3xl space-y-7">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-pill bg-accent-yellow text-ink-900 font-mono text-xs sm:text-sm font-extrabold border-2 border-ink-900 shadow-hard">
-          <span className="w-2.5 h-2.5 rounded-full bg-accent-pink animate-ping" />
+      <div className="relative z-10 max-w-3xl space-y-5 sm:space-y-7">
+        <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-pill bg-accent-yellow text-ink-900 font-mono text-xs sm:text-sm font-extrabold border-2 border-ink-900 shadow-hard">
+          <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-accent-pink animate-ping" />
           <span>Get Started In Seconds</span>
         </div>
 
-        <h2 className="display-large text-white tracking-tight font-extrabold">
+        <h2 className="display-large text-white tracking-tight font-extrabold text-3xl sm:text-5xl lg:text-6xl">
           Ready To Produce Your Next Launch Video?
         </h2>
 
-        <p className="text-xl sm:text-2xl text-[#f5f2ed] font-bold leading-relaxed max-w-2xl">
+        <p className="text-base sm:text-2xl text-[#f5f2ed] font-bold leading-relaxed max-w-2xl">
           Run one command against your repository or website URL to generate an unwatermarked 60fps cinema promo reel.
         </p>
 
-        <div className="flex flex-wrap items-center gap-5 pt-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3.5 sm:gap-5 pt-2 sm:pt-4">
           <MagneticButton
             onClick={onWatchClick}
-            className="bg-accent-pink hover:bg-white text-white hover:text-ink-900 px-8 py-4 rounded-pill font-mono text-base font-extrabold shadow-hard flex items-center gap-3 transition-all hover:scale-105"
+            className="w-full sm:w-auto bg-accent-pink hover:bg-white text-white hover:text-ink-900 px-6 sm:px-8 py-3.5 sm:py-4 rounded-pill font-mono text-sm sm:text-base font-extrabold shadow-hard flex items-center justify-center gap-2.5 sm:gap-3 transition-all hover:scale-105"
           >
-            <Film className="w-5 h-5 text-accent-yellow" />
+            <Film className="w-4 h-4 sm:w-5 sm:h-5 text-accent-yellow" />
             <span>Watch Showcase Reel</span>
-            <ArrowRight className="w-5 h-5 text-accent-green" />
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-accent-green" />
           </MagneticButton>
 
           {/* Interactive Command Copier */}
           <div
             onClick={handleCopy}
-            className="group cursor-pointer bg-[#181413] hover:bg-[#25201e] border-2 border-white/30 hover:border-accent-green px-6 py-4 rounded-pill font-mono text-base font-extrabold text-accent-green flex items-center gap-3 transition-all shadow-md"
+            className="w-full sm:w-auto group cursor-pointer bg-[#181413] hover:bg-[#25201e] border-2 border-white/30 hover:border-accent-green px-4 sm:px-6 py-3.5 sm:py-4 rounded-pill font-mono text-xs sm:text-base font-extrabold text-accent-green flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 transition-all shadow-md"
             title="Click to copy command"
           >
-            <Terminal className="w-5 h-5 text-accent-pink flex-shrink-0" />
-            <span className="tracking-tight">$ {commandText}</span>
-            <span className="ml-2 pl-3 border-l border-white/20 text-white group-hover:text-accent-yellow text-xs font-mono uppercase tracking-wider flex items-center gap-1.5">
+            <div className="flex items-center gap-2 truncate">
+              <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink flex-shrink-0" />
+              <span className="tracking-tight truncate">$ {commandText}</span>
+            </div>
+            <span className="ml-2 pl-2 sm:pl-3 border-l border-white/20 text-white group-hover:text-accent-yellow text-[11px] sm:text-xs font-mono uppercase tracking-wider flex items-center gap-1 flex-shrink-0">
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-accent-green stroke-[3]" />
+                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent-green stroke-[3]" />
                   <span className="text-accent-green font-bold">Copied!</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-4 h-4" />
+                  <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span>Copy</span>
                 </>
               )}

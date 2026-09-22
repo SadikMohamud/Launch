@@ -103,43 +103,43 @@ export const CliSimulator: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-[#0c0a09] border-2 border-ink-900 rounded-3xl overflow-hidden shadow-2xl">
+    <div className="bg-[#0c0a09] border-2 sm:border-4 border-ink-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
       {/* Top Window Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#171412] border-b-2 border-white/20 px-6 py-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#171412] border-b-2 border-white/20 px-4 sm:px-6 py-3.5 sm:py-4">
         <div className="flex items-center gap-3">
-          <div className="flex gap-2">
-            <span className="w-3.5 h-3.5 rounded-full bg-accent-pink shadow-sm" />
-            <span className="w-3.5 h-3.5 rounded-full bg-accent-yellow shadow-sm" />
-            <span className="w-3.5 h-3.5 rounded-full bg-accent-green shadow-sm" />
+          <div className="flex gap-1.5 sm:gap-2">
+            <span className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-accent-pink shadow-sm" />
+            <span className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-accent-yellow shadow-sm" />
+            <span className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-accent-green shadow-sm" />
           </div>
-          <span className="text-base font-mono font-extrabold text-white flex items-center gap-2 pl-2">
-            <Terminal className="w-5 h-5 text-accent-pink" />
-            Terminal Command Runner
+          <span className="text-sm sm:text-base font-mono font-extrabold text-white flex items-center gap-2 pl-1 sm:pl-2">
+            <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
+            <span>Terminal Runner</span>
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={() => runSimulation(selectedId)}
-            className="flex items-center gap-2 text-sm font-mono font-extrabold text-ink-900 bg-accent-green hover:bg-white px-4 py-2 rounded-pill transition-all shadow-md"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-mono font-extrabold text-ink-900 bg-accent-green hover:bg-white px-3.5 sm:px-4 py-2 rounded-pill transition-all shadow-md"
             title="Simulate Execution"
           >
-            <Play className="w-4 h-4 fill-current" />
-            <span>Simulate Run</span>
+            <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
+            <span>Run</span>
           </button>
 
           <button
             onClick={handleCopy}
-            className="flex items-center gap-2 text-sm font-mono font-extrabold bg-accent-pink hover:bg-white text-white hover:text-ink-900 px-4 py-2 rounded-pill transition-all shadow-md"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-mono font-extrabold bg-accent-pink hover:bg-white text-white hover:text-ink-900 px-3.5 sm:px-4 py-2 rounded-pill transition-all shadow-md"
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4 text-accent-green" />
+                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent-green stroke-[3]" />
                 <span>Copied!</span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4" />
+                <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span>Copy</span>
               </>
             )}
@@ -148,16 +148,16 @@ export const CliSimulator: React.FC = () => {
       </div>
 
       {/* Preset Command Tabs */}
-      <div className="flex gap-3 p-4 bg-[#120f0e] border-b-2 border-white/20 overflow-x-auto">
+      <div className="flex gap-2 p-3 sm:p-4 bg-[#120f0e] border-b-2 border-white/20 overflow-x-auto scrollbar-none">
         {commands.map((c) => {
           const isSelected = selectedId === c.id;
           return (
             <button
               key={c.id}
               onClick={() => runSimulation(c.id)}
-              className={`px-5 py-2.5 rounded-pill text-sm font-mono whitespace-nowrap font-extrabold transition-all border-2 ${
+              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-pill text-xs sm:text-sm font-mono whitespace-nowrap font-extrabold transition-all border-2 flex-shrink-0 ${
                 isSelected
-                  ? 'bg-accent-pink text-white border-accent-pink shadow-hard-pink scale-105'
+                  ? 'bg-accent-pink text-white border-accent-pink shadow-hard-pink scale-102'
                   : 'bg-[#221e1d] text-white hover:bg-[#332c2a] border-white/20'
               }`}
             >
@@ -168,45 +168,45 @@ export const CliSimulator: React.FC = () => {
       </div>
 
       {/* Terminal Viewport */}
-      <div className="bg-[#080707] text-white p-6 sm:p-8 font-mono text-base leading-relaxed space-y-6">
+      <div className="bg-[#080707] text-white p-4 sm:p-8 font-mono text-xs sm:text-base leading-relaxed space-y-4 sm:space-y-6">
         {/* Command Line Prompt */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b-2 border-white/20">
-          <div className="flex items-center gap-3">
-            <span className="text-accent-pink font-extrabold text-2xl select-none">$</span>
-            <span className="font-extrabold text-white text-lg sm:text-xl tracking-tight bg-white/15 px-4 py-2 rounded-xl border-2 border-white/25">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-4 border-b-2 border-white/20">
+          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-none">
+            <span className="text-accent-pink font-extrabold text-lg sm:text-2xl select-none">$</span>
+            <span className="font-extrabold text-white text-sm sm:text-xl tracking-tight bg-white/15 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border-2 border-white/25 whitespace-nowrap">
               {active.cmd}
             </span>
           </div>
-          <span className="text-xs sm:text-sm text-ink-900 font-extrabold bg-accent-yellow px-4 py-2 rounded-pill border-2 border-ink-900 flex items-center gap-1.5 self-start sm:self-auto shadow-sm">
-            <Sparkles className="w-4 h-4 text-ink-900" />
+          <span className="text-[11px] sm:text-sm text-ink-900 font-extrabold bg-accent-yellow px-3 py-1 sm:px-4 sm:py-2 rounded-pill border-2 border-ink-900 flex items-center gap-1.5 self-start sm:self-auto shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-ink-900" />
             <span>{active.desc}</span>
           </span>
         </div>
 
         {/* Real-time Output Log Lines */}
-        <div className="pt-2 space-y-3.5 font-mono">
+        <div className="pt-1 space-y-2.5 sm:space-y-3.5 font-mono">
           {active.output.slice(0, visibleLines).map((line, idx) => {
             const isDelivered = line.startsWith('★ Delivered');
             return (
               <div
                 key={idx}
-                className={`flex items-start gap-3.5 text-base sm:text-lg transition-all duration-150 ${
+                className={`flex items-start gap-2.5 sm:gap-3.5 text-xs sm:text-lg transition-all duration-150 ${
                   isDelivered
-                    ? 'text-accent-green font-extrabold bg-accent-green/20 p-4 rounded-xl border-2 border-accent-green shadow-md'
+                    ? 'text-accent-green font-extrabold bg-accent-green/20 p-3 sm:p-4 rounded-xl border-2 border-accent-green shadow-md'
                     : 'text-white font-bold'
                 }`}
               >
-                <span className="text-accent-yellow text-sm select-none pt-0.5 font-extrabold">
+                <span className="text-accent-yellow text-xs select-none pt-0.5 font-extrabold">
                   {String(idx + 1).padStart(2, '0')}
                 </span>
-                <span>{line}</span>
+                <span className="break-words sm:break-normal">{line}</span>
               </div>
             );
           })}
 
           {isRunning && (
-            <div className="flex items-center gap-2 text-accent-yellow text-base font-extrabold pt-2 animate-pulse">
-              <span className="w-2.5 h-2.5 rounded-full bg-accent-yellow" />
+            <div className="flex items-center gap-2 text-accent-yellow text-xs sm:text-base font-extrabold pt-2 animate-pulse">
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-accent-yellow" />
               <span>Processing pipeline stream...</span>
             </div>
           )}
