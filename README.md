@@ -200,7 +200,4 @@ npx vercel --prod
 ```
 
 ---
-
-## 📄 Licence
-
-MIT License &middot; Created by **[Snurm](https://github.com/SadikMohamud)**
+Created by **[Snurm](https://github.com/SadikMohamud)**
