@@ -13,59 +13,59 @@ interface InstallOption {
 
 const installOptions: InstallOption[] = [
   {
+    id: 'windows',
+    label: 'Windows (PowerShell 1-Click)',
+    platform: 'Windows 10 / 11 (PowerShell)',
+    cmd: 'irm https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.ps1 | iex',
+    desc: 'One-line automated PowerShell installer that clones, links, and registers the global launch command.',
+    notes: [
+      'Automatically registers global launch command',
+      'Requires Node.js 20+ and FFmpeg (via winget)',
+      'Instant availability in PowerShell & Terminal'
+    ]
+  },
+  {
     id: 'agent',
     label: 'Claude Code / Agent Skill',
-    platform: 'AI Coding Agents',
-    cmd: 'mkdir -p ~/.claude/skills/launch && curl -fsSL https://raw.githubusercontent.com/SadikMohamud/Launch/main/skill/SKILL.md -o ~/.claude/skills/launch/SKILL.md',
+    platform: 'AI Coding Agents (Claude Code / Antigravity)',
+    cmd: 'New-Item -ItemType Directory -Force -Path "$HOME\\.claude\\skills\\launch"; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/SadikMohamud/Launch/main/skill/SKILL.md" -OutFile "$HOME\\.claude\\skills\\launch\\SKILL.md"',
     desc: 'Install the native /launch slash command into Claude Code and Antigravity environments.',
     notes: [
       'Enables instant /launch slash command in chat',
       'Auto-detects current project codebase',
-      'Direct integration with Hyperframes engine'
+      'Direct integration with 60fps Hyperframes engine'
     ]
   },
   {
-    id: 'npx',
-    label: 'npm (Global) / npx',
-    platform: 'Cross-Platform (Node.js)',
-    cmd: 'npm install -g launch-engine\n# Or zero-install with npx:\nnpx launch-engine https://example.com',
-    desc: 'Install globally via npm or run directly without installation via npx.',
+    id: 'clone',
+    label: 'Git Clone & npm link',
+    platform: 'Cross-Platform (Windows / Mac / Linux)',
+    cmd: 'git clone https://github.com/SadikMohamud/Launch.git && cd Launch && npm install && npm link --force',
+    desc: 'Clone the repository and globally link the binary with zero package registry dependencies.',
     notes: [
-      'Works in PowerShell, Terminal, and Bash',
-      'Supports both local directories and live URLs',
-      'Zero-install instant execution via npx'
-    ]
-  },
-  {
-    id: 'windows',
-    label: 'Windows (winget)',
-    platform: 'Windows 10 / 11',
-    cmd: 'winget install OpenJS.NodeJS.LTS Gyan.FFmpeg Git.Git\nnpm install -g launch-engine',
-    desc: 'Install all prerequisites and Launch engine via winget on Windows PowerShell.',
-    notes: [
-      'Automatically configures Node.js 20+ & FFmpeg',
-      'GPU hardware acceleration out of the box',
-      'Ready for PowerShell and Windows Terminal'
+      'Works in PowerShell, Bash, and zsh',
+      'Links directly to local source tree',
+      'Immediate access to launch command'
     ]
   },
   {
     id: 'macos',
-    label: 'macOS (Homebrew)',
-    platform: 'macOS Apple Silicon / Intel',
-    cmd: 'brew install node ffmpeg git\nnpm install -g launch-engine',
-    desc: 'One-line Homebrew installation for macOS.',
+    label: 'macOS (1-Line Install)',
+    platform: 'macOS Apple Silicon & Intel',
+    cmd: 'curl -fsSL https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.sh | bash',
+    desc: 'One-line automated installer for macOS with native Apple Silicon acceleration.',
     notes: [
-      'Native Apple Silicon M1/M2/M3 hardware acceleration',
-      'FFmpeg bundled with AAC and H.264 codecs',
-      'Instant terminal command availability'
+      'Native Apple Silicon M1/M2/M3/M4 acceleration',
+      'Bundles global launch command link',
+      'Zero configuration setup'
     ]
   },
   {
     id: 'linux',
-    label: 'Linux (Ubuntu / Debian)',
-    platform: 'Linux / WSL2',
-    cmd: 'sudo apt update && sudo apt install -y nodejs npm ffmpeg git\nnpm install -g launch-engine',
-    desc: 'Debian and Ubuntu package manager installation script.',
+    label: 'Linux (Ubuntu / Debian / WSL)',
+    platform: 'Linux & WSL2',
+    cmd: 'curl -fsSL https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.sh | bash',
+    desc: 'Automated script for Debian, Ubuntu, and WSL2 environments.',
     notes: [
       'Full headless Chromium support',
       'Hardware GPU acceleration via VA-API / NVENC',

@@ -79,7 +79,31 @@ Ensure you have the following installed on your machine:
 
 ---
 
-### 2. Clone & Install Dependencies
+### 2. Fast 1-Line Installation
+
+#### Windows (PowerShell):
+```powershell
+irm https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.ps1 | iex
+```
+
+#### macOS / Linux:
+```bash
+curl -fsSL https://raw.githubusercontent.com/SadikMohamud/Launch/main/install.sh | bash
+```
+
+#### AI Coding Agents (Claude Code / Antigravity):
+- **Windows (PowerShell)**:
+  ```powershell
+  New-Item -ItemType Directory -Force -Path "$HOME\.claude\skills\launch"; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/SadikMohamud/Launch/main/skill/SKILL.md" -OutFile "$HOME\.claude\skills\launch\SKILL.md"
+  ```
+- **macOS / Linux**:
+  ```bash
+  mkdir -p ~/.claude/skills/launch && curl -fsSL https://raw.githubusercontent.com/SadikMohamud/Launch/main/skill/SKILL.md -o ~/.claude/skills/launch/SKILL.md
+  ```
+
+---
+
+### 3. Manual Clone & Global Link
 
 ```bash
 # Clone the repository
@@ -88,13 +112,14 @@ git clone https://github.com/SadikMohamud/Launch.git
 # Navigate into the project folder
 cd Launch
 
-# Install dependencies
+# Install dependencies and link the global executable
 npm install
+npm link --force
 ```
 
 ---
 
-### 3. Run Development Server
+### 4. Run Development Server
 
 ```bash
 # Start local development server with HMR and Lenis smooth scroll
