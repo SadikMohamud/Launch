@@ -86,16 +86,16 @@ const features: FeatureCard[] = [
 export const FeaturesGrid: React.FC = () => {
   return (
     <div className="space-y-10">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-ink-900 pb-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-ink-900 dark:border-white/20 pb-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-accent-pink text-white font-mono text-xs font-extrabold uppercase tracking-wider mb-2 shadow-hard">
             Capabilities
           </div>
-          <h2 className="display-medium text-ink-900">
+          <h2 className="display-medium text-ink-900 dark:text-white">
             Engine Architecture & Features
           </h2>
         </div>
-        <p className="text-lg font-bold text-ink-900 font-sans max-w-md leading-relaxed">
+        <p className="text-lg font-bold text-ink-900 dark:text-[#dcd8d5] font-sans max-w-md leading-relaxed">
           Built for software engineers, design studios, and product teams to deliver cinema-grade video assets in seconds.
         </p>
       </div>
@@ -110,28 +110,28 @@ export const FeaturesGrid: React.FC = () => {
               className="h-full rounded-3xl"
             >
               <div
-                className={`bg-surface border-2 border-ink-900 rounded-3xl p-8 h-full flex flex-col justify-between shadow-hard transition-shadow duration-300 ${f.shadowHover}`}
+                className={`bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-3xl p-8 h-full flex flex-col justify-between shadow-hard transition-shadow duration-300 ${f.shadowHover}`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
                     <span className={`text-xs font-mono font-extrabold px-3.5 py-1.5 rounded-pill ${f.badgeColor}`}>
                       {f.tag}
                     </span>
-                    <div className="w-12 h-12 rounded-2xl bg-white border-2 border-ink-900 flex items-center justify-center text-ink-900 shadow-sm">
-                      <Icon className="w-6 h-6 text-ink-900" />
+                    <div className="w-12 h-12 rounded-2xl bg-white dark:bg-[#25201d] border-2 border-ink-900 dark:border-white/20 flex items-center justify-center text-ink-900 dark:text-white shadow-sm">
+                      <Icon className="w-6 h-6 text-ink-900 dark:text-white" />
                     </div>
                   </div>
 
-                  <h3 className="font-sans font-extrabold text-2xl text-ink-900 tracking-tight mb-3">
+                  <h3 className="font-sans font-extrabold text-2xl text-ink-900 dark:text-white tracking-tight mb-3">
                     {f.title}
                   </h3>
-                  <p className="text-base font-semibold text-ink-900 leading-relaxed mb-6">
+                  <p className="text-base font-semibold text-ink-900 dark:text-[#dcd8d5] leading-relaxed mb-6">
                     {f.desc}
                   </p>
 
-                  <div className="space-y-3 pt-4 border-t-2 border-ink-900/15">
+                  <div className="space-y-3 pt-4 border-t-2 border-ink-900/15 dark:border-white/10">
                     {f.bullets.map((b, bIdx) => (
-                      <div key={bIdx} className="flex items-center gap-2.5 text-sm font-extrabold font-mono text-ink-900">
+                      <div key={bIdx} className="flex items-center gap-2.5 text-sm font-extrabold font-mono text-ink-900 dark:text-white">
                         <CheckCircle2 className="w-4 h-4 text-accent-green flex-shrink-0" />
                         <span>{b}</span>
                       </div>
@@ -139,9 +139,9 @@ export const FeaturesGrid: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="pt-6 mt-6 border-t-2 border-ink-900/15 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900">
+                <div className="pt-6 mt-6 border-t-2 border-ink-900/15 dark:border-white/10 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900 dark:text-white">
                   <span className="uppercase tracking-wider">Standard</span>
-                  <span className="text-ink-900 font-extrabold bg-white px-3 py-1.5 rounded-pill border-2 border-ink-900 flex items-center gap-1 shadow-sm">
+                  <span className="text-ink-900 dark:text-white font-extrabold bg-white dark:bg-[#25201d] px-3 py-1.5 rounded-pill border-2 border-ink-900 dark:border-white/20 flex items-center gap-1 shadow-sm">
                     <span>{f.spec}</span>
                     <ArrowUpRight className="w-4 h-4 text-accent-pink" />
                   </span>

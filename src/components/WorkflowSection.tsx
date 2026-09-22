@@ -53,16 +53,16 @@ const workflowSteps: WorkflowStep[] = [
 export const WorkflowSection: React.FC = () => {
   return (
     <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-ink-900 pb-5">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-ink-900 dark:border-white/20 pb-5">
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-accent-green text-ink-900 font-mono text-xs font-extrabold uppercase tracking-wider mb-2 shadow-hard border-2 border-ink-900">
             Pipeline
           </div>
-          <h2 className="display-medium text-ink-900">
+          <h2 className="display-medium text-ink-900 dark:text-white">
             How The Engine Works
           </h2>
         </div>
-        <p className="text-lg font-bold text-ink-900 font-sans max-w-md leading-relaxed">
+        <p className="text-lg font-bold text-ink-900 dark:text-[#dcd8d5] font-sans max-w-md leading-relaxed">
           From source code to cinema-grade video delivery in three deterministic steps.
         </p>
       </div>
@@ -77,11 +77,11 @@ export const WorkflowSection: React.FC = () => {
               className="h-full rounded-3xl"
             >
               <div
-                className="bg-surface border-2 border-ink-900 rounded-3xl p-6 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-pink transition-shadow duration-300 group"
+                className="bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-3xl p-6 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-pink transition-shadow duration-300 group"
               >
                 <div>
                   {/* Visual Media Preview Header with Badge */}
-                  <div className="relative aspect-video rounded-2xl overflow-hidden border-2 border-ink-900 bg-ink-900 mb-6 shadow-sm">
+                  <div className="relative aspect-video rounded-2xl overflow-hidden border-2 border-ink-900 dark:border-white/20 bg-ink-900 mb-6 shadow-sm">
                     <img
                       src={s.image}
                       alt={s.title}
@@ -105,20 +105,20 @@ export const WorkflowSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <h3 className="font-sans font-extrabold text-2xl text-ink-900 tracking-tight mb-3">
+                  <h3 className="font-sans font-extrabold text-2xl text-ink-900 dark:text-white tracking-tight mb-3">
                     {s.title}
                   </h3>
-                  <p className="text-base font-semibold text-ink-900 leading-relaxed">
+                  <p className="text-base font-semibold text-ink-900 dark:text-[#dcd8d5] leading-relaxed">
                     {s.desc}
                   </p>
                 </div>
 
-                <div className="pt-6 mt-6 border-t-2 border-ink-900/15 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900">
+                <div className="pt-6 mt-6 border-t-2 border-ink-900/15 dark:border-white/10 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900 dark:text-white">
                   <span className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-accent-green border border-ink-900 animate-pulse" />
                     <span>Active Pipeline</span>
                   </span>
-                  <span className="text-ink-900 font-extrabold bg-white px-3.5 py-1.5 rounded-pill border-2 border-ink-900 flex items-center gap-1 shadow-sm">
+                  <span className="text-ink-900 dark:text-white font-extrabold bg-white dark:bg-[#25201d] px-3.5 py-1.5 rounded-pill border-2 border-ink-900 dark:border-white/20 flex items-center gap-1 shadow-sm">
                     <span>Automated</span>
                     <ArrowRight className="w-4 h-4 text-accent-pink" />
                   </span>

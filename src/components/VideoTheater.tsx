@@ -298,21 +298,21 @@ export const VideoTheater: React.FC = () => {
         </div>
 
         {/* Video Description Callout */}
-        <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-surface border-2 border-ink-900 p-4 sm:p-6 rounded-2xl shadow-hard">
+        <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 p-4 sm:p-6 rounded-2xl shadow-hard">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="font-sans text-xl sm:text-2xl font-extrabold text-ink-900">{activeVideo.title}</h3>
-              <span className="text-xs font-mono px-2.5 py-0.5 rounded-pill bg-ink-900 text-white font-bold">
+              <h3 className="font-sans text-xl sm:text-2xl font-extrabold text-ink-900 dark:text-white">{activeVideo.title}</h3>
+              <span className="text-xs font-mono px-2.5 py-0.5 rounded-pill bg-ink-900 dark:bg-white text-white dark:text-ink-900 font-bold">
                 {activeVideo.domain}
               </span>
             </div>
-            <p className="text-sm sm:text-lg text-ink-900 mt-1.5 sm:mt-2 max-w-3xl font-medium leading-relaxed">
+            <p className="text-sm sm:text-lg text-ink-900 dark:text-[#dcd8d5] mt-1.5 sm:mt-2 max-w-3xl font-medium leading-relaxed">
               {activeVideo.desc}
             </p>
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0 pt-2 sm:pt-0">
-            <span className={`text-xs font-mono px-3.5 py-1.5 rounded-pill font-extrabold uppercase tracking-wider border-2 border-ink-900 ${activeVideo.accentBadge}`}>
+            <span className={`text-xs font-mono px-3.5 py-1.5 rounded-pill font-extrabold uppercase tracking-wider border-2 border-ink-900 dark:border-white/20 ${activeVideo.accentBadge}`}>
               {activeVideo.tag}
             </span>
           </div>
@@ -322,11 +322,11 @@ export const VideoTheater: React.FC = () => {
       {/* Touch-Swipe Filmstrip Carousel */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs sm:text-sm font-mono font-extrabold uppercase tracking-wider text-ink-900 flex items-center gap-1.5">
+          <span className="text-xs sm:text-sm font-mono font-extrabold uppercase tracking-wider text-ink-900 dark:text-white flex items-center gap-1.5">
             <span>Select Production</span>
             <ChevronRight className="w-4 h-4 text-accent-pink sm:hidden" />
           </span>
-          <span className="text-xs font-mono text-ink-900 font-bold bg-surface px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-pill border border-ink-900">
+          <span className="text-xs font-mono text-ink-900 dark:text-white font-bold bg-surface dark:bg-[#181412] px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-pill border border-ink-900 dark:border-white/20">
             5 Releases
           </span>
         </div>
@@ -341,8 +341,8 @@ export const VideoTheater: React.FC = () => {
                 onClick={() => setActiveVideo(v)}
                 className={`w-[190px] sm:w-auto flex-shrink-0 snap-start group cursor-pointer rounded-2xl overflow-hidden border-2 p-2.5 transition-all duration-200 relative ${
                   isSelected
-                    ? 'border-ink-900 bg-surface shadow-hard -translate-y-0.5 ring-2 ring-accent-pink'
-                    : 'border-ink-900 bg-white hover:bg-surface hover:shadow-md'
+                    ? 'border-ink-900 dark:border-white/40 bg-surface dark:bg-[#25201d] shadow-hard -translate-y-0.5 ring-2 ring-accent-pink'
+                    : 'border-ink-900 dark:border-white/20 bg-white dark:bg-[#181412] hover:bg-surface dark:hover:bg-[#201c19] hover:shadow-md'
                 }`}
               >
                 {/* Thumbnail */}
@@ -366,8 +366,8 @@ export const VideoTheater: React.FC = () => {
                 </div>
 
                 <div className="px-1">
-                  <div className="font-extrabold text-xs sm:text-sm text-ink-900 truncate">{v.title}</div>
-                  <div className="text-[11px] sm:text-xs font-mono text-ink-900 font-bold truncate mt-0.5">{v.domain}</div>
+                  <div className="font-extrabold text-xs sm:text-sm text-ink-900 dark:text-white truncate">{v.title}</div>
+                  <div className="text-[11px] sm:text-xs font-mono text-ink-900 dark:text-[#dcd8d5] font-bold truncate mt-0.5">{v.domain}</div>
                 </div>
               </div>
             );

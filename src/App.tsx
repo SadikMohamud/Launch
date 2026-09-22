@@ -47,7 +47,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-white text-ink-900 flex flex-col justify-between selection:bg-accent-pink selection:text-white font-sans antialiased overflow-x-hidden w-full">
+    <div className="relative min-h-screen bg-white dark:bg-[#0a0807] text-ink-900 dark:text-[#f8f6f5] flex flex-col justify-between selection:bg-accent-pink selection:text-white font-sans antialiased overflow-x-hidden w-full transition-colors duration-200">
       {/* Custom Precision Follower Cursor (auto-disabled on touch) */}
       <CustomCursor />
 
@@ -80,9 +80,9 @@ export const App: React.FC = () => {
             <SplitReveal
               text="Turn Any Web Project Into A Cinema Promo Video."
               as="h1"
-              className="display-huge text-ink-900 tracking-tight font-extrabold text-4xl sm:text-6xl lg:text-8xl"
+              className="display-huge text-ink-900 dark:text-white tracking-tight font-extrabold text-4xl sm:text-6xl lg:text-8xl"
             />
-            <p className="text-lg sm:text-2xl text-ink-900 font-sans max-w-3xl font-bold leading-relaxed">
+            <p className="text-lg sm:text-2xl text-ink-900 dark:text-[#dcd8d5] font-sans max-w-3xl font-bold leading-relaxed">
               Generate unwatermarked 60fps promo videos directly from your local codebase or live URL. Extract computed design tokens and true motion physics in seconds.
             </p>
           </div>
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2 sm:pt-4">
             <MagneticButton
               onClick={scrollToShowcase}
-              className="w-full sm:w-auto bg-ink-900 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-pill font-mono text-sm sm:text-base font-extrabold hover:bg-accent-pink shadow-hard flex items-center justify-center gap-2.5 sm:gap-3 transition-all hover:scale-105"
+              className="w-full sm:w-auto bg-ink-900 dark:bg-white text-white dark:text-ink-900 px-6 sm:px-8 py-3.5 sm:py-4 rounded-pill font-mono text-sm sm:text-base font-extrabold hover:bg-accent-pink dark:hover:bg-accent-pink dark:hover:text-white shadow-hard flex items-center justify-center gap-2.5 sm:gap-3 transition-all hover:scale-105"
             >
               <Film className="w-4 h-4 sm:w-5 sm:h-5 text-accent-yellow" />
               <span>Explore Video Showcase</span>
@@ -100,33 +100,33 @@ export const App: React.FC = () => {
 
             <a
               href="#install"
-              className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-pill font-mono text-sm sm:text-base font-extrabold text-ink-900 bg-surface hover:bg-white border-2 border-ink-900 transition-all shadow-hard text-center flex items-center justify-center"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-pill font-mono text-sm sm:text-base font-extrabold text-ink-900 dark:text-white bg-surface dark:bg-[#181412] hover:bg-white dark:hover:bg-[#24201d] border-2 border-ink-900 dark:border-white/20 transition-all shadow-hard text-center flex items-center justify-center"
             >
               $ /launch --help
             </a>
           </div>
 
           {/* Performance Highlights Matrix */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-6 sm:pt-8 border-t-2 border-ink-900 text-xs font-mono font-extrabold text-ink-900">
-            <div className="flex items-center gap-3 bg-surface border-2 border-ink-900 p-4 sm:p-5 rounded-2xl shadow-hard-pink">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-6 sm:pt-8 border-t-2 border-ink-900 dark:border-white/20 text-xs font-mono font-extrabold text-ink-900 dark:text-white">
+            <div className="flex items-center gap-3 bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 p-4 sm:p-5 rounded-2xl shadow-hard-pink">
               <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-accent-pink flex-shrink-0" />
               <div>
-                <div className="text-base sm:text-lg font-extrabold text-ink-900">Computed Design Tokens</div>
-                <div className="text-xs sm:text-sm text-ink-900 font-semibold mt-0.5">Extracts styles from real CSSOM</div>
+                <div className="text-base sm:text-lg font-extrabold text-ink-900 dark:text-white">Computed Design Tokens</div>
+                <div className="text-xs sm:text-sm text-ink-900 dark:text-[#dcd8d5] font-semibold mt-0.5">Extracts styles from real CSSOM</div>
               </div>
             </div>
-            <div className="flex items-center gap-3 bg-surface border-2 border-ink-900 p-4 sm:p-5 rounded-2xl shadow-hard-green">
+            <div className="flex items-center gap-3 bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 p-4 sm:p-5 rounded-2xl shadow-hard-green">
               <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-accent-green flex-shrink-0" />
               <div>
-                <div className="text-base sm:text-lg font-extrabold text-ink-900">Sub-Pixel Kinetic Physics</div>
-                <div className="text-xs sm:text-sm text-ink-900 font-semibold mt-0.5">Authentic cubic-bezier easing</div>
+                <div className="text-base sm:text-lg font-extrabold text-ink-900 dark:text-white">Sub-Pixel Kinetic Physics</div>
+                <div className="text-xs sm:text-sm text-ink-900 dark:text-[#dcd8d5] font-semibold mt-0.5">Authentic cubic-bezier easing</div>
               </div>
             </div>
-            <div className="flex items-center gap-3 bg-surface border-2 border-ink-900 p-4 sm:p-5 rounded-2xl shadow-hard-yellow">
+            <div className="flex items-center gap-3 bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 p-4 sm:p-5 rounded-2xl shadow-hard-yellow">
               <CheckCircle2 className="w-6 h-6 text-accent-yellow flex-shrink-0" />
               <div>
-                <div className="text-base sm:text-lg font-extrabold text-ink-900">60fps Delivery Master</div>
-                <div className="text-xs sm:text-sm text-ink-900 font-semibold mt-0.5">Baked frame 0 poster included</div>
+                <div className="text-base sm:text-lg font-extrabold text-ink-900 dark:text-white">60fps Delivery Master</div>
+                <div className="text-xs sm:text-sm text-ink-900 dark:text-[#dcd8d5] font-semibold mt-0.5">Baked frame 0 poster included</div>
               </div>
             </div>
           </div>
@@ -137,16 +137,16 @@ export const App: React.FC = () => {
 
         {/* Video Theater Showcase Section */}
         <section id="showcase" className="max-w-6xl mx-auto px-4 sm:px-6 space-y-4 sm:space-y-6 scroll-mt-20">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3 border-b-2 border-ink-900 pb-4 sm:pb-5">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3 border-b-2 border-ink-900 dark:border-white/20 pb-4 sm:pb-5">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-accent-pink text-white font-mono text-xs font-extrabold uppercase tracking-wider mb-2 shadow-hard">
                 Productions
               </div>
-              <h2 className="display-medium text-ink-900">
+              <h2 className="display-medium text-ink-900 dark:text-white">
                 Showcase Video Theater
               </h2>
             </div>
-            <div className="text-xs sm:text-sm font-mono font-extrabold text-ink-900 bg-surface px-3 py-1 sm:px-4 sm:py-1.5 rounded-pill border border-ink-900 self-start sm:self-auto">
+            <div className="text-xs sm:text-sm font-mono font-extrabold text-ink-900 dark:text-white bg-surface dark:bg-[#181412] px-3 py-1 sm:px-4 sm:py-1.5 rounded-pill border border-ink-900 dark:border-white/20 self-start sm:self-auto">
               Select any production below to play in 4K / 60fps
             </div>
           </div>
@@ -175,10 +175,10 @@ export const App: React.FC = () => {
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-accent-yellow text-ink-900 font-mono text-xs font-extrabold uppercase tracking-wider shadow-hard border-2 border-ink-900">
               Terminal
             </div>
-            <h2 className="display-medium text-ink-900">
+            <h2 className="display-medium text-ink-900 dark:text-white">
               High-Precision Command Interface
             </h2>
-            <p className="text-base sm:text-lg text-ink-900 font-sans max-w-xl font-bold">
+            <p className="text-base sm:text-lg text-ink-900 dark:text-[#dcd8d5] font-sans max-w-xl font-bold">
               Run against local repositories or public URLs to generate deliverables in seconds.
             </p>
           </div>

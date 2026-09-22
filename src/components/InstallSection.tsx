@@ -89,22 +89,22 @@ export const InstallSection: React.FC = () => {
   return (
     <div className="space-y-6 sm:space-y-10">
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4 border-b-2 border-ink-900 pb-5 sm:pb-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4 border-b-2 border-ink-900 dark:border-white/20 pb-5 sm:pb-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-accent-yellow text-ink-900 font-mono text-xs font-extrabold uppercase tracking-wider mb-2 shadow-hard border-2 border-ink-900">
             Installation & Setup
           </div>
-          <h2 className="display-medium text-ink-900">
+          <h2 className="display-medium text-ink-900 dark:text-white">
             How To Install & Run Launch
           </h2>
         </div>
-        <p className="text-base sm:text-lg font-bold text-ink-900 font-sans max-w-md leading-relaxed">
+        <p className="text-base sm:text-lg font-bold text-ink-900 dark:text-[#dcd8d5] font-sans max-w-md leading-relaxed">
           Install as a slash command in your AI coding agent or run globally via npm on any laptop.
         </p>
       </div>
 
       {/* Main Interactive Installation Box */}
-      <div className="bg-[#0c0a09] border-2 sm:border-4 border-ink-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-hard-pink">
+      <div className="bg-[#0c0a09] border-2 sm:border-4 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden shadow-hard-pink">
         {/* Top Control Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#171412] border-b-2 border-white/20 px-4 sm:px-6 py-3.5 sm:py-4">
           <div className="flex items-center gap-3">
@@ -189,19 +189,19 @@ export const InstallSection: React.FC = () => {
       {/* 3-Step Quick Start Matrix */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-2 sm:pt-4">
         <TiltCard spotlightColor="rgba(255, 0, 144, 0.15)" className="h-full rounded-2xl sm:rounded-3xl">
-          <div className="bg-surface border-2 border-ink-900 rounded-2xl sm:rounded-3xl p-5 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-pink transition-shadow duration-300">
+          <div className="bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-pink transition-shadow duration-300">
             <div className="space-y-3 sm:space-y-4">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-accent-pink text-white flex items-center justify-center border-2 border-ink-900 shadow-sm">
                 <Cpu className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
               </div>
-              <h3 className="font-sans font-extrabold text-xl sm:text-2xl text-ink-900">
+              <h3 className="font-sans font-extrabold text-xl sm:text-2xl text-ink-900 dark:text-white">
                 1. Verify Prerequisites
               </h3>
-              <p className="text-sm sm:text-base font-semibold text-ink-900 leading-relaxed">
-                Ensure Node.js 20+ and FFmpeg are installed. Run <code className="bg-white px-1.5 py-0.5 rounded border border-ink-900 font-mono text-xs font-bold">node -v</code> and <code className="bg-white px-1.5 py-0.5 rounded border border-ink-900 font-mono text-xs font-bold">ffmpeg -version</code>.
+              <p className="text-sm sm:text-base font-semibold text-ink-900 dark:text-[#dcd8d5] leading-relaxed">
+                Ensure Node.js 20+ and FFmpeg are installed. Run <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">node -v</code> and <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">ffmpeg -version</code>.
               </p>
             </div>
-            <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t-2 border-ink-900/15 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900">
+            <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t-2 border-ink-900/15 dark:border-white/10 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900 dark:text-white">
               <span>Required</span>
               <span className="bg-accent-green text-ink-900 px-2.5 sm:px-3 py-1 rounded-pill border-2 border-ink-900">Node 20+ & FFmpeg</span>
             </div>
@@ -209,19 +209,19 @@ export const InstallSection: React.FC = () => {
         </TiltCard>
 
         <TiltCard spotlightColor="rgba(0, 255, 102, 0.15)" className="h-full rounded-2xl sm:rounded-3xl">
-          <div className="bg-surface border-2 border-ink-900 rounded-2xl sm:rounded-3xl p-5 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-green transition-shadow duration-300">
+          <div className="bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-green transition-shadow duration-300">
             <div className="space-y-3 sm:space-y-4">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-accent-green text-ink-900 flex items-center justify-center border-2 border-ink-900 shadow-sm">
                 <Terminal className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
               </div>
-              <h3 className="font-sans font-extrabold text-xl sm:text-2xl text-ink-900">
+              <h3 className="font-sans font-extrabold text-xl sm:text-2xl text-ink-900 dark:text-white">
                 2. Run Launch Command
               </h3>
-              <p className="text-sm sm:text-base font-semibold text-ink-900 leading-relaxed">
-                In your project folder or terminal, type <code className="bg-white px-1.5 py-0.5 rounded border border-ink-900 font-mono text-xs font-bold">/launch</code> or pass a public URL like <code className="bg-white px-1.5 py-0.5 rounded border border-ink-900 font-mono text-xs font-bold">/launch https://yoursite.com</code>.
+              <p className="text-sm sm:text-base font-semibold text-ink-900 dark:text-[#dcd8d5] leading-relaxed">
+                In your project folder or terminal, type <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">/launch</code> or pass a public URL like <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">/launch https://yoursite.com</code>.
               </p>
             </div>
-            <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t-2 border-ink-900/15 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900">
+            <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t-2 border-ink-900/15 dark:border-white/10 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900 dark:text-white">
               <span>Execution</span>
               <span className="bg-accent-yellow text-ink-900 px-2.5 sm:px-3 py-1 rounded-pill border-2 border-ink-900">&lt; 30s Render</span>
             </div>
@@ -229,21 +229,21 @@ export const InstallSection: React.FC = () => {
         </TiltCard>
 
         <TiltCard spotlightColor="rgba(255, 230, 0, 0.15)" className="h-full rounded-2xl sm:rounded-3xl">
-          <div className="bg-surface border-2 border-ink-900 rounded-2xl sm:rounded-3xl p-5 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-yellow transition-shadow duration-300">
+          <div className="bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-7 h-full flex flex-col justify-between shadow-hard hover:shadow-hard-yellow transition-shadow duration-300">
             <div className="space-y-3 sm:space-y-4">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-accent-yellow text-ink-900 flex items-center justify-center border-2 border-ink-900 shadow-sm">
                 <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
               </div>
-              <h3 className="font-sans font-extrabold text-xl sm:text-2xl text-ink-900">
+              <h3 className="font-sans font-extrabold text-xl sm:text-2xl text-ink-900 dark:text-white">
                 3. Collect 60fps Master
               </h3>
-              <p className="text-sm sm:text-base font-semibold text-ink-900 leading-relaxed">
-                Your promo video <code className="bg-white px-1.5 py-0.5 rounded border border-ink-900 font-mono text-xs font-bold">launch.mp4</code> and baked poster <code className="bg-white px-1.5 py-0.5 rounded border border-ink-900 font-mono text-xs font-bold">launch.jpg</code> are delivered to <code className="bg-white px-1.5 py-0.5 rounded border border-ink-900 font-mono text-xs font-bold">launch-output/</code>.
+              <p className="text-sm sm:text-base font-semibold text-ink-900 dark:text-[#dcd8d5] leading-relaxed">
+                Your promo video <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">launch.mp4</code> and baked poster <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">launch.jpg</code> are delivered to <code className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-1.5 py-0.5 rounded border border-ink-900 dark:border-white/20 font-mono text-xs font-bold">launch-output/</code>.
               </p>
             </div>
-            <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t-2 border-ink-900/15 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900">
+            <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t-2 border-ink-900/15 dark:border-white/10 flex items-center justify-between text-xs font-mono font-extrabold text-ink-900 dark:text-white">
               <span>Deliverable</span>
-              <span className="bg-white text-ink-900 px-2.5 sm:px-3 py-1 rounded-pill border-2 border-ink-900 flex items-center gap-1">
+              <span className="bg-white dark:bg-[#25201d] text-ink-900 dark:text-white px-2.5 sm:px-3 py-1 rounded-pill border-2 border-ink-900 dark:border-white/20 flex items-center gap-1">
                 <span>Zero Watermark</span>
                 <ArrowRight className="w-3.5 h-3.5 text-accent-pink" />
               </span>

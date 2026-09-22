@@ -14,6 +14,13 @@
   --colour-border: #d5d2cf;
 }
 
+html.dark {
+  --colour-canvas: #0a0807;
+  --colour-surface: #181412;
+  --colour-text: #f8f6f5;
+  --colour-border: rgba(255, 255, 255, 0.2);
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -27,6 +34,12 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html.dark, html.dark body {
+  background-color: #0a0807;
+  color: #f8f6f5;
 }
 
 /* Custom crisp scrollbar for desktop */

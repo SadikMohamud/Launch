@@ -103,7 +103,7 @@ export const CliSimulator: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-[#0c0a09] border-2 sm:border-4 border-ink-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
+    <div className="bg-[#0c0a09] border-2 sm:border-4 border-ink-900 dark:border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
       {/* Top Window Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#171412] border-b-2 border-white/20 px-4 sm:px-6 py-3.5 sm:py-4">
         <div className="flex items-center gap-3">

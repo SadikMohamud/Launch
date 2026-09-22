@@ -33,16 +33,16 @@ export const FaqSection: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-ink-900 pb-5">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-ink-900 dark:border-white/20 pb-5">
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-accent-yellow text-ink-900 font-mono text-xs font-extrabold uppercase tracking-wider mb-2 shadow-hard border-2 border-ink-900">
             FAQ
           </div>
-          <h2 className="display-medium text-ink-900">
+          <h2 className="display-medium text-ink-900 dark:text-white">
             Frequently Asked Questions
           </h2>
         </div>
-        <p className="text-lg font-bold text-ink-900 font-sans max-w-md leading-relaxed">
+        <p className="text-lg font-bold text-ink-900 dark:text-[#dcd8d5] font-sans max-w-md leading-relaxed">
           Common questions about video generation, formats, and local pipeline rendering.
         </p>
       </div>
@@ -55,18 +55,18 @@ export const FaqSection: React.FC = () => {
               key={idx}
               className={`rounded-2xl border-2 transition-all duration-200 overflow-hidden ${
                 isOpen
-                  ? 'border-ink-900 bg-surface shadow-hard'
-                  : 'border-ink-900 bg-white hover:bg-surface'
+                  ? 'border-ink-900 dark:border-white/30 bg-surface dark:bg-[#181412] shadow-hard'
+                  : 'border-ink-900 dark:border-white/20 bg-white dark:bg-[#120f0e] hover:bg-surface dark:hover:bg-[#181412]'
               }`}
             >
               <div
                 onClick={() => toggleFaq(idx)}
                 className="p-6 flex items-center justify-between gap-4 cursor-pointer select-none"
               >
-                <h3 className="font-sans font-extrabold text-xl text-ink-900">{f.q}</h3>
+                <h3 className="font-sans font-extrabold text-xl text-ink-900 dark:text-white">{f.q}</h3>
                 <button
-                  className={`w-9 h-9 rounded-pill border-2 border-ink-900 flex items-center justify-center font-bold flex-shrink-0 transition-all ${
-                    isOpen ? 'bg-accent-pink text-white shadow-sm' : 'bg-white text-ink-900'
+                  className={`w-9 h-9 rounded-pill border-2 border-ink-900 dark:border-white/20 flex items-center justify-center font-bold flex-shrink-0 transition-all ${
+                    isOpen ? 'bg-accent-pink text-white shadow-sm' : 'bg-white dark:bg-[#221e1d] text-ink-900 dark:text-white'
                   }`}
                 >
                   {isOpen ? <ChevronUp className="w-5 h-5 text-white" /> : <ChevronDown className="w-5 h-5" />}
@@ -74,7 +74,7 @@ export const FaqSection: React.FC = () => {
               </div>
 
               {isOpen && (
-                <div className="px-6 pb-6 pt-3 text-ink-900 font-semibold leading-relaxed border-t-2 border-ink-900/15 bg-white text-base sm:text-lg">
+                <div className="px-6 pb-6 pt-3 text-ink-900 dark:text-[#dcd8d5] font-semibold leading-relaxed border-t-2 border-ink-900/15 dark:border-white/10 bg-white dark:bg-[#181412] text-base sm:text-lg">
                   {f.a}
                 </div>
               )}
