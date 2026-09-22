@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-launch--ouzf.vercel.app-00ff66.svg?style=for-the-badge&logo=vercel&logoColor=black)](https://launch-ouzf.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-ff0090.svg?style=for-the-badge)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D20.0.0-00ff66.svg?style=for-the-badge&logo=node.js&logoColor=black)](https://nodejs.org)
 [![Rendering](https://img.shields.io/badge/Render-60fps%20Deterministic-ffe600.svg?style=for-the-badge&logoColor=black)]()
@@ -11,7 +12,7 @@
 **Generate unwatermarked 60fps cinema promo videos directly from your local codebase or live URL.**  
 Extracts computed design tokens and true cubic-bezier motion physics in seconds.
 
-[Explore Showcase](#-curated-showcase-productions) • [Quick Install](#-step-by-step-installation) • [CLI Commands](#-cli-command-reference) • [Architecture](#-engine-architecture)
+[**🌐 Live Website: launch-ouzf.vercel.app**](https://launch-ouzf.vercel.app/) • [Explore Showcase](#-curated-showcase-productions) • [Quick Install](#-step-by-step-installation) • [CLI Commands](#-cli-command-reference) • [Architecture](#-engine-architecture)
 
 </div>
 
