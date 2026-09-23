@@ -28,8 +28,16 @@ export function resolveTarget(raw) {
     throw usageError('No target given.', 'Pass a URL or a project folder, for example: launch https://example.com');
   }
 
-  // Anything carrying a scheme is treated as a URL, so a mistyped "file://"
-  // is refused rather than silently resolved as a relative folder name.
+  // A Windows absolute path begins with a drive letter followed by a colon,
+  // which is indistinguishable from a single letter URL scheme. Drive paths
+  // are therefore matched first, or "C:\Users\me\site" would be rejected as
+  // an unsupported "c:" scheme.
+  if (/^[a-zA-Z]:[\\/]/.test(value)) {
+    return resolvePathTarget(value);
+  }
+
+  // Anything else carrying a scheme is treated as a URL, so a mistyped
+  // "file://" is refused rather than silently resolved as a folder name.
   if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(value)) {
     return resolveUrlTarget(value);
   }

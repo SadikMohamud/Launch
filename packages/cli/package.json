@@ -20,8 +20,8 @@
     "README.md"
   ],
   "scripts": {
-    "test": "node --test test/unit",
-    "test:e2e": "node --test --test-timeout=600000 test/e2e",
+    "test": "node --test \"test/unit/**/*.test.js\"",
+    "test:e2e": "node --test --test-timeout=900000 \"test/e2e/**/*.test.js\"",
     "postinstall": "node ./src/postinstall.js"
   },
   "dependencies": {
