@@ -136,19 +136,33 @@ export function collectInPage() {
 
     if (style.boxShadow && style.boxShadow !== 'none') count(shadowCounts, style.boxShadow);
 
-    // Motion. Durations arrive as comma separated seconds, so each entry in
-    // the list is read rather than only the first.
-    for (const property of ['transitionDuration', 'animationDuration']) {
-      for (const piece of String(style[property]).split(',')) {
-        const ms = Math.round(Number.parseFloat(piece.trim()) * 1000);
-        if (Number.isFinite(ms) && ms > 0 && ms <= 5000) count(durationCounts, ms);
-      }
-    }
+    // Motion.
+    //
+    // Durations and timing functions are read as matched pairs, and a timing
+    // function is only recorded when its own duration is greater than zero.
+    //
+    // This matters more than it looks. Every element in a document reports a
+    // computed transition-timing-function of "ease" whether or not it has a
+    // transition, so counting them all means the CSS default wins by sheer
+    // volume and the handful of elements carrying the site's real curve are
+    // drowned out. Pairing with the duration counts only declared motion.
+    for (const [durationProperty, easingProperty] of [
+      ['transitionDuration', 'transitionTimingFunction'],
+      ['animationDuration', 'animationTimingFunction'],
+    ]) {
+      const durations = String(style[durationProperty]).split(',');
+      // Split on commas that are not inside the brackets of a cubic-bezier.
+      const easings = String(style[easingProperty]).split(/,(?![^(]*\))/);
 
-    // Easings are split on commas that are not inside a cubic-bezier bracket.
-    for (const property of ['transitionTimingFunction', 'animationTimingFunction']) {
-      for (const piece of String(style[property]).split(/,(?![^(]*\))/)) {
-        const easing = piece.trim();
+      for (let i = 0; i < durations.length; i++) {
+        const ms = Math.round(Number.parseFloat(durations[i].trim()) * 1000);
+        if (!Number.isFinite(ms) || ms <= 0 || ms > 5000) continue;
+
+        count(durationCounts, ms);
+
+        // A shorthand may list fewer timing functions than durations, in
+        // which case CSS repeats the list, so the index wraps.
+        const easing = easings.length > 0 ? easings[i % easings.length].trim() : '';
         if (easing) count(easingCounts, easing);
       }
     }

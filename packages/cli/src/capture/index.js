@@ -12,7 +12,17 @@ import process from 'node:process';
 import { launchBrowser, openPage, freezeClock, closeQuietly } from './browser.js';
 import { collectInPage } from './tokens.js';
 import { shapeTokens } from './shape.js';
+import { evaluateWithTimeout } from './settle.js';
 import { LaunchError, EXIT } from '../errors.js';
+
+/**
+ * Bounds for the optional settling steps. These are generous enough that a
+ * slow but working page still settles properly, and short enough that a page
+ * which never settles does not stall the run.
+ */
+const FONTS_TIMEOUT_MS = 10_000;
+const SCROLL_TIMEOUT_MS = 20_000;
+const DECODE_TIMEOUT_MS = 10_000;
 
 /** Viewport used for the desktop capture. */
 const DESKTOP_VIEWPORT = { width: 1440, height: 900 };
@@ -77,12 +87,16 @@ async function waitForSettled(page, { timeout, waitFor }) {
     }
   }
 
+  // Every wait below is bounded. Each one is a promise that can stay pending
+  // forever on a real site rather than rejecting, so a catch alone would not
+  // save us. See settle.js for why each one hangs.
+
   // Fonts settling is what stops a capture showing fallback typefaces.
-  await page.evaluate(() => document.fonts.ready).catch(() => {});
+  await evaluateWithTimeout(page, () => document.fonts.ready, FONTS_TIMEOUT_MS);
 
   // Trigger lazy loading by walking the page, then return to the top. The
   // scroll is instant rather than smooth so it costs no wall clock time.
-  await page.evaluate(async () => {
+  await evaluateWithTimeout(page, async () => {
     const step = window.innerHeight;
     const height = document.body.scrollHeight;
     for (let y = 0; y < height; y += step) {
@@ -91,15 +105,16 @@ async function waitForSettled(page, { timeout, waitFor }) {
     }
     window.scrollTo(0, 0);
     await new Promise((resolve) => requestAnimationFrame(resolve));
-  }).catch(() => {});
+  }, SCROLL_TIMEOUT_MS);
 
-  // Give decoded images a moment to paint after the scroll pass.
+  // Give decoded images a moment to paint after the scroll pass. A lazily
+  // loaded or dead image never settles its decode promise at all.
   await page.waitForLoadState('networkidle', { timeout: Math.min(timeout, 10_000) }).catch(() => {});
-  await page.evaluate(() => Promise.all(
+  await evaluateWithTimeout(page, () => Promise.all(
     Array.from(document.images)
       .filter((image) => !image.complete)
       .map((image) => image.decode().catch(() => {}))
-  )).catch(() => {});
+  ), DECODE_TIMEOUT_MS);
 }
 
 /**

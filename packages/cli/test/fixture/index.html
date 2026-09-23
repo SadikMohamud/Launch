@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Harbour Lane Studio</title>
+<style>
+  /* This fixture exists so the end to end test renders a real film without
+     depending on any external site. Its tokens are deliberately distinctive
+     so the test can assert that extraction actually read the page rather
+     than returning defaults. */
+  :root {
+    --canvas: #0d0b0a;
+    --ink: #faf8f4;
+    --accent: #c4623a;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+
+  /* Transitions are declared so the extractor has a motion signature to
+     measure. Nothing on the page actually animates on load. */
+  a, button, .card {
+    transition: transform 400ms var(--ease), opacity 400ms var(--ease);
+  }
+
+  .hero {
+    min-height: 100vh;
+    padding: 120px 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 24px;
+    background: var(--canvas);
+  }
+
+  h1 { font-size: 72px; line-height: 76px; letter-spacing: -1.44px; font-weight: 400; max-width: 900px; }
+  h2 { font-size: 40px; line-height: 48px; font-weight: 400; margin-bottom: 24px; }
+  p  { font-size: 17px; line-height: 27px; max-width: 640px; }
+
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .panel { padding: 120px 96px; background: var(--ink); color: var(--canvas); }
+  .panel p { color: var(--canvas); }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 64px; }
+
+  .card {
+    padding: 40px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    background: var(--canvas);
+    color: var(--ink);
+  }
+  .card p { color: var(--ink); }
+
+  .closing { padding: 120px 96px; background: var(--canvas); }
+
+  .rule { height: 3px; width: 320px; background: var(--accent); margin-top: 40px; }
+</style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Architecture and interiors</p>
+      <h1>Considered spaces for considered people</h1>
+      <p>We design buildings that age well, using materials chosen for how they weather rather than how they photograph on the day they are finished.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Recent work</h2>
+      <p>A short selection of projects completed across the last four years, ranging from a coastal house to a converted grain store.</p>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Grain Store</h2>
+          <p>A nineteenth century store rebuilt as a single family home, keeping the original roof structure exposed throughout.</p>
+        </div>
+        <div class="card">
+          <h2>Coastal House</h2>
+          <p>A low house set into a dune, arranged so every room opens onto sheltered ground rather than onto the wind.</p>
+        </div>
+        <div class="card">
+          <h2>Harbour Offices</h2>
+          <p>Workspace for a fishing cooperative, built in blockwork and larch to survive constant salt exposure.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <h2>Working together</h2>
+      <p>We take on a small number of projects each year so that each one receives the attention it needs from first sketch to final handover.</p>
+      <div class="rule"></div>
+    </section>
+  </main>
+</body>
+</html>
