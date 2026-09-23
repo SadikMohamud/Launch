@@ -1,0 +1,18 @@
+# Normalise line endings so the repository stays consistent across
+# Windows, macOS and Ubuntu checkouts.
+* text=auto
+
+# Shell scripts must keep LF endings or they will not run on macOS or
+# Ubuntu after a Windows checkout.
+*.sh text eol=lf
+
+# Windows entry points must keep CRLF or cmd.exe mis-parses them.
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary assets are never normalised or diffed.
+*.mp4 binary
+*.jpg binary
+*.png binary
+*.woff2 binary
+*.ico binary

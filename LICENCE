@@ -1,0 +1,67 @@
+Launch Engine
+Proprietary Licence
+
+Copyright (c) 2026 Sadik Mohamud, trading as Snurm.
+All rights reserved.
+
+1. Grant
+
+Subject to the terms below, you are granted a personal, non-exclusive,
+non-transferable, revocable licence to install and run the Launch Engine
+software ("the Software") to produce video output.
+
+2. Ownership
+
+The Software is licensed, not sold. All right, title and interest in and to
+the Software, including all intellectual property rights, remain with the
+copyright holder.
+
+3. Restrictions
+
+You may not:
+
+  (a) copy, publish, redistribute, sublicense, sell, rent or lease the
+      Software or any part of it;
+  (b) modify, adapt, translate or create derivative works of the Software;
+  (c) reverse engineer, decompile or disassemble the Software, except to the
+      extent that this restriction is prohibited by applicable law;
+  (d) remove or obscure any copyright, trade mark or other proprietary notice;
+  (e) use the Software to build or train a competing product or service.
+
+4. Your output
+
+Video files, poster images and design token files produced by the Software
+belong to you. They carry no watermark, no attribution requirement and no
+royalty obligation. Nothing in this licence gives the copyright holder any
+claim over your output or over the websites and projects you render.
+
+5. Third party components
+
+The Software invokes FFmpeg as a separate process. FFmpeg is distributed
+under its own licence terms, which are reproduced in the NOTICE file
+accompanying this licence. Nothing in this licence restricts any right you
+hold under those terms in respect of FFmpeg itself.
+
+6. No warranty
+
+The Software is provided "as is", without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability,
+fitness for a particular purpose and non-infringement.
+
+7. Limitation of liability
+
+In no event shall the copyright holder be liable for any claim, damages or
+other liability, whether in an action of contract, tort or otherwise,
+arising from, out of or in connection with the Software or the use or other
+dealings in the Software.
+
+8. Termination
+
+This licence terminates automatically if you breach any of its terms. On
+termination you must stop using the Software and delete all copies.
+
+9. Governing law
+
+This licence is governed by the laws of England and Wales.
+
+Enquiries: https://github.com/SadikMohamud

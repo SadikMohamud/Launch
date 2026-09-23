@@ -1,0 +1,57 @@
+Third Party Notices
+Launch Engine
+
+Launch Engine is proprietary software. It depends on, and invokes as separate
+processes, the third party components listed below. Those components remain
+subject to their own licences, which are not affected by the Launch Engine
+licence.
+
+-------------------------------------------------------------------------------
+FFmpeg
+-------------------------------------------------------------------------------
+
+Launch Engine invokes the FFmpeg and ffprobe executables as separate child
+processes over a pipe. It does not link against FFmpeg libraries and contains
+no FFmpeg source code.
+
+The FFmpeg builds distributed through the "ffmpeg-static" npm package are
+configured with libx264 and are therefore licensed under the GNU General
+Public License, version 3 or later (GPL-3.0-or-later).
+
+  FFmpeg project:  https://ffmpeg.org
+  FFmpeg source:   https://github.com/FFmpeg/FFmpeg
+  Licence text:    https://www.gnu.org/licenses/gpl-3.0.txt
+
+Written offer for source code: on request, and for a period of three years
+from the date you received the software, the copyright holder will provide a
+complete machine readable copy of the corresponding source code for the
+FFmpeg build distributed with Launch Engine, at no charge beyond the cost of
+distribution. Send requests via https://github.com/SadikMohamud
+
+If you prefer not to receive the bundled GPL build, install FFmpeg yourself
+and Launch Engine will use the system executable instead. Run "launch doctor"
+to confirm which executable is in use.
+
+-------------------------------------------------------------------------------
+Playwright
+-------------------------------------------------------------------------------
+
+  Copyright (c) Microsoft Corporation
+  Licensed under the Apache License, Version 2.0
+  https://www.apache.org/licenses/LICENSE-2.0
+  https://github.com/microsoft/playwright
+
+Playwright downloads a Chromium build on installation. Chromium is licensed
+under the BSD 3-Clause Licence and the licences of its own dependencies.
+
+  https://chromium.googlesource.com/chromium/src/+/main/LICENSE
+
+-------------------------------------------------------------------------------
+ffprobe-static
+-------------------------------------------------------------------------------
+
+  Licensed under the MIT Licence
+  https://github.com/joshwnj/ffprobe-static
+
+The ffprobe executable it distributes is part of the FFmpeg project and is
+covered by the FFmpeg notice above.
