@@ -12,10 +12,16 @@ import path from 'node:path';
 import process from 'node:process';
 import { chromium } from 'playwright';
 import { resolveFfmpeg, resolveFfprobe, installHint } from './ffmpeg.js';
+import { probeHyperframes, HYPERFRAMES_VERSION } from './render/hyperframes.js';
 import { EXIT } from './errors.js';
 
-/** Node major version the CLI requires. */
-const MIN_NODE_MAJOR = 20;
+/**
+ * Node major version the CLI requires.
+ *
+ * The renderer needs 22 or newer, so the CLI cannot honestly claim to run on
+ * 20: it would install, pass a shallow check, and then fail at render time.
+ */
+const MIN_NODE_MAJOR = 22;
 
 /** Disk space a long render needs for its intermediate frames, in bytes. */
 const REQUIRED_FREE_BYTES = 3 * 1024 * 1024 * 1024;
@@ -133,10 +139,28 @@ async function checkDiskSpace(outDir) {
   }
 }
 
+/**
+ * The renderer itself. A present Node and a present Chromium still do not
+ * prove the pinned renderer can start, and it is fetched on first use, so it
+ * is checked by actually running it.
+ */
+async function checkRenderer() {
+  const probe = await probeHyperframes();
+
+  if (probe.ok) return result('Renderer', true, `hyperframes ${probe.version}`);
+
+  return result(
+    'Renderer',
+    false,
+    `hyperframes ${HYPERFRAMES_VERSION} could not be started`,
+    'Check your network connection, then run: npx hyperframes@' + HYPERFRAMES_VERSION + ' doctor'
+  );
+}
+
 /** Available parallelism, which sets how many render workers we can run. */
 function checkCores() {
   const cores = os.cpus().length;
-  return result('CPU cores', true, `${cores} (render workers: ${Math.max(1, Math.min(6, cores - 1))})`);
+  return result('CPU cores', true, String(cores));
 }
 
 /**
@@ -150,6 +174,7 @@ export async function runDoctor({ out } = {}) {
     await checkFfmpeg(),
     await checkFfprobe(),
     await checkChromium(),
+    await checkRenderer(),
     await checkOutputWritable(out),
     await checkDiskSpace(out),
     checkCores(),

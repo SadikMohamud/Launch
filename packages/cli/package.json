@@ -7,7 +7,7 @@
   "homepage": "https://github.com/SadikMohamud/Launch",
   "type": "module",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "bin": {
     "launch": "./bin/launch.js"
@@ -27,8 +27,8 @@
   "dependencies": {
     "commander": "^12.1.0",
     "ffmpeg-static": "^5.3.0",
-    "ffprobe-static": "^3.1.0",
-    "playwright-core": "^1.63.0",
-    "playwright": "^1.63.0"
+    "hyperframes": "^0.8.64",
+    "playwright": "^1.63.0",
+    "playwright-core": "^1.63.0"
   }
 }

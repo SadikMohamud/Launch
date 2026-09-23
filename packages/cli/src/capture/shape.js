@@ -57,7 +57,7 @@ export function saturation(hex) {
  * Accent is the most saturated remaining colour that carries enough contrast
  * against the canvas to be legible when used for a rule or a label.
  */
-export function buildColourTokens(raw) {
+export function buildColourTokens(raw, pixelPalette = []) {
   const warnings = [];
 
   const backgrounds = raw.backgrounds ?? [];
@@ -92,15 +92,33 @@ export function buildColourTokens(raw) {
 
   // The accent is scored on saturation first and usage second, so a small
   // but vivid brand colour beats a large expanse of near grey.
-  const accentCandidates = palette
+  //
+  // Candidates come from the pixels as well as the stylesheet. A site whose
+  // hero is a full bleed film or photograph carries its brand colour in the
+  // image rather than in CSS, and a stylesheet-only search reports no accent
+  // at all for pages that are obviously, vividly coloured.
+  const fromCss = palette
     .filter((entry) => entry.hex !== canvas && entry.hex !== ink)
+    .map((entry) => ({ hex: entry.hex, coverage: entry.coverage, source: 'stylesheet' }));
+
+  const fromPixels = pixelPalette.map((entry) => ({
+    hex: entry.hex,
+    coverage: entry.coverage,
+    source: 'image',
+  }));
+
+  const accentCandidates = [...fromCss, ...fromPixels]
     .map((entry) => ({
       ...entry,
       saturation: saturation(entry.hex),
       contrastOnCanvas: contrastRatio(entry.hex, canvas),
     }))
-    .filter((entry) => entry.saturation > 0.15 && entry.contrastOnCanvas >= 3)
-    .sort((a, b) => b.saturation * Math.log1p(b.coverage * 100) - a.saturation * Math.log1p(a.coverage * 100));
+    .filter((entry) => entry.saturation > 0.3 && entry.contrastOnCanvas >= 3)
+    // Saturation is squared so a vivid colour covering a little of the frame
+    // beats a dull one covering a lot. Averaging pixels into buckets already
+    // pulls colours towards grey, and a coverage weighted score compounds
+    // that until the accent of a magenta page comes out as a muted brown.
+    .sort((a, b) => (b.saturation ** 2) * Math.log1p(b.coverage * 100) - (a.saturation ** 2) * Math.log1p(a.coverage * 100));
 
   let accent = accentCandidates[0];
   if (!accent) {
@@ -112,6 +130,7 @@ export function buildColourTokens(raw) {
   } else {
     const entry = palette.find((item) => item.hex === accent.hex);
     if (entry) entry.role = 'accent';
+    else palette.push({ hex: accent.hex, coverage: accent.coverage, role: 'accent', sampleSelectors: [], source: 'image' });
   }
 
   return {
@@ -119,9 +138,17 @@ export function buildColourTokens(raw) {
       scheme: relativeLuminance(canvas) < 0.35 ? 'dark' : 'light',
       canvas,
       ink,
+      muted: mutedInk(ink, canvas),
       accent: {
         hex: accent.hex,
         contrastOnCanvas: Number(accent.contrastOnCanvas.toFixed(2)),
+        source: accent.source ?? 'fallback',
+        // Text placed on the accent, chosen for contrast rather than assumed.
+        // A dark brand colour needs white on it and a bright one needs black,
+        // and guessing either way fails the contrast gate on some sites.
+        onAccent: contrastRatio('#ffffff', accent.hex) >= contrastRatio('#000000', accent.hex)
+          ? '#ffffff'
+          : '#000000',
       },
       inkOnCanvasContrast: Number(contrastRatio(ink, canvas).toFixed(2)),
       palette,
@@ -129,6 +156,42 @@ export function buildColourTokens(raw) {
     },
     warnings,
   };
+}
+
+/**
+ * A quieter version of the ink colour, for eyebrows and captions.
+ *
+ * Designers set secondary text lighter than body text, and doing that by eye
+ * is how contrast failures get shipped. This walks the ink towards the
+ * canvas and stops at the last step that still clears the WCAG AA body text
+ * ratio of 4.5:1, so the muted token is as soft as it can be while remaining
+ * compliant.
+ */
+export function mutedInk(ink, canvas) {
+  const from = hexToRgb(ink);
+  const to = hexToRgb(canvas);
+
+  let best = ink;
+
+  for (let step = 1; step <= 10; step++) {
+    const amount = step / 20; // up to halfway towards the canvas
+    const blended = rgbToHex({
+      r: from.r + (to.r - from.r) * amount,
+      g: from.g + (to.g - from.g) * amount,
+      b: from.b + (to.b - from.b) * amount,
+    });
+
+    if (contrastRatio(blended, canvas) < 4.5) break;
+    best = blended;
+  }
+
+  return best;
+}
+
+/** Channels back to a hex string. */
+export function rgbToHex({ r, g, b }) {
+  const part = (n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+  return `#${part(r)}${part(g)}${part(b)}`;
 }
 
 /**
@@ -377,7 +440,7 @@ export function mode(values) {
  * @returns {object} the tokens JSON, matching the documented schema
  */
 export function shapeTokens(raw, meta) {
-  const colour = buildColourTokens(raw);
+  const colour = buildColourTokens(raw, meta.pixelPalette ?? []);
   const type = buildTypeTokens(raw);
   const motion = buildMotionTokens(raw);
 

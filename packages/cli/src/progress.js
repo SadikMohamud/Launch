@@ -32,6 +32,7 @@ export function createReporter({ quiet = false } = {}) {
   const started = Date.now();
   const interactive = Boolean(process.stderr.isTTY) && !process.env.CI;
   let lastLineLength = 0;
+  let lastPercentText = '';
 
   /** Write a line that replaces itself, where the terminal supports it. */
   function transient(text) {
@@ -73,6 +74,24 @@ export function createReporter({ quiet = false } = {}) {
       // it is throttled to the quarter marks.
       if (interactive) transient(text);
       else if (done === total || percent % 25 === 0) line(text);
+    },
+
+    /** Report a percentage reported by an external renderer. */
+    percent(label, value, stage) {
+      const text = `  ${label}  ${String(value).padStart(3)}%  ${stage ?? ''}`;
+
+      if (interactive) {
+        transient(`${text}  ${formatElapsed(Date.now() - started)}`);
+        return;
+      }
+
+      // A renderer reports a running frame counter, so the stage text differs
+      // on every update even while the percentage stands still. Throttling on
+      // the percentage alone is what keeps a log to one line per step.
+      const key = `${label}${value}`;
+      if (key === lastPercentText) return;
+      lastPercentText = key;
+      line(`${text}  ${formatElapsed(Date.now() - started)}`);
     },
 
     /** Clear any transient line before the process writes its result. */

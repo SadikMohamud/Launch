@@ -77,9 +77,9 @@ function reportSuccess(result, reporter) {
   reporter.line(`  Poster  ${result.poster}`);
   reporter.line(`  Tokens  ${result.tokens}`);
   reporter.line(
-    `  ${result.dimensions} at ${result.fps}fps, ${result.durationSeconds}s, ` +
-    `${result.frameCount} frames, ${result.sizeHuman}, in ${result.elapsedHuman}`
+    `  ${result.dimensions}, ${result.durationSeconds}s, ${result.sizeHuman}, in ${result.elapsedHuman}`
   );
+  reporter.line(`  Scenes  ${result.scenes.join(' -> ')}`);
   reporter.line('');
 }
 

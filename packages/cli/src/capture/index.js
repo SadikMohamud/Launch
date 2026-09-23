@@ -11,8 +11,10 @@ import path from 'node:path';
 import process from 'node:process';
 import { launchBrowser, openPage, freezeClock, closeQuietly } from './browser.js';
 import { collectInPage } from './tokens.js';
+import { collectContentInPage } from './content.js';
 import { shapeTokens } from './shape.js';
 import { evaluateWithTimeout } from './settle.js';
+import { samplePixels } from './pixels.js';
 import { LaunchError, EXIT } from '../errors.js';
 
 /**
@@ -194,6 +196,9 @@ export async function capture({ url, requestedTarget, workDir, options, onProgre
     onProgress('capture', 'reading design tokens');
     const raw = await page.evaluate(collectInPage);
 
+    onProgress('capture', 'reading page content');
+    const content = await page.evaluate(collectContentInPage);
+
     onProgress('capture', 'saving stills');
     const stills = [];
 
@@ -248,6 +253,10 @@ export async function capture({ url, requestedTarget, workDir, options, onProgre
       await mobile.context.close().catch(() => {});
     }
 
+    // The hero still is sampled for colour, so the palette reflects what the
+    // page looks like rather than only what its stylesheet declares.
+    const pixelPalette = await samplePixels(heroFile, 10);
+
     const tokens = shapeTokens(raw, {
       capturedAt: new Date().toISOString(),
       engine: {
@@ -258,10 +267,11 @@ export async function capture({ url, requestedTarget, workDir, options, onProgre
       requestedTarget,
       viewport: { ...DESKTOP_VIEWPORT, deviceScaleFactor: 2 },
       loadMs,
+      pixelPalette,
       media: { stills },
     });
 
-    return { tokens, stillsDir };
+    return { tokens, content, stillsDir };
   } finally {
     await closeQuietly(browser);
   }
