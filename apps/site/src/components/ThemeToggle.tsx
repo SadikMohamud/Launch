@@ -1,38 +1,32 @@
+// Theme toggle.
+//
+// The icon shows the theme you would switch to, and the accessible name says
+// so explicitly, because an icon alone is ambiguous about whether it
+// describes the current state or the action.
+
 import React from 'react';
+import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../theme/ThemeContext.tsx';
-import { Sun, Moon } from 'lucide-react';
 
-interface ThemeToggleProps {
-  className?: string;
-  showLabel?: boolean;
-}
-
-export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '', showLabel = false }) => {
+export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }) => {
   const { theme, toggleTheme } = useTheme();
-  const isDark = theme === 'dark';
+  const goingToLight = theme === 'dark';
 
   return (
     <button
-      onClick={toggleTheme}
       type="button"
-      className={`inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl border-2 transition-all duration-200 cursor-pointer select-none font-mono text-xs font-extrabold ${
-        isDark
-          ? 'bg-[#1e1a18] text-accent-yellow border-white/20 hover:border-accent-yellow hover:bg-[#282320] shadow-sm'
-          : 'bg-white text-ink-900 border-ink-900 hover:bg-surface hover:border-accent-pink shadow-sm'
-      } ${className}`}
-      title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-      aria-label={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+      onClick={toggleTheme}
+      aria-label={goingToLight ? 'Switch to the light theme' : 'Switch to the dark theme'}
+      className={[
+        'inline-flex items-center justify-center border border-line p-2 text-muted',
+        'transition-colors duration-signal ease-signal hover:text-ink',
+        className,
+      ].join(' ')}
     >
-      {isDark ? (
-        <>
-          <Sun className="w-4 h-4 text-accent-yellow animate-spin-slow" />
-          {showLabel && <span>Light Mode</span>}
-        </>
+      {goingToLight ? (
+        <Sun aria-hidden="true" className="h-4 w-4" />
       ) : (
-        <>
-          <Moon className="w-4 h-4 text-ink-900 fill-ink-900/10" />
-          {showLabel && <span>Dark Mode</span>}
-        </>
+        <Moon aria-hidden="true" className="h-4 w-4" />
       )}
     </button>
   );

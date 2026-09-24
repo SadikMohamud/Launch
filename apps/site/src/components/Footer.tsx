@@ -1,114 +1,66 @@
+// Footer.
+//
+// The licence line here is the corrected one. The previous footer claimed
+// "All Rights Reserved" while the README carried an MIT badge pointing at a
+// licence file that did not exist. Launch is proprietary, and the films
+// people render with it are theirs; both halves of that are stated plainly.
+
 import React from 'react';
-import { ShieldCheck, Lock, BookOpen } from 'lucide-react';
 
-interface FooterProps {
-  onOpenReadme?: () => void;
-}
+const LINKS = [
+  { href: '#install', label: 'Install' },
+  { href: '#capabilities', label: 'Flags' },
+  { href: '#faq', label: 'FAQ' },
+  { href: '/licence', label: 'Licence' },
+  { href: '/privacy', label: 'Privacy' },
+];
 
-export const Footer: React.FC<FooterProps> = ({ onOpenReadme }) => {
+export const Footer: React.FC = () => {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="border-t-2 border-ink-900 dark:border-white/20 bg-surface dark:bg-[#100e0d] py-10 sm:py-16 px-4 sm:px-6 mt-16 sm:mt-28 transition-colors duration-200">
-      <div className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
-        {/* Main Footer Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b-2 border-ink-900/15 dark:border-white/10 text-center md:text-left">
-          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-            <div className="w-10 h-10 rounded-xl bg-accent-pink text-white flex items-center justify-center font-extrabold font-mono text-xl shadow-hard">
-              /
-            </div>
-            <div>
-              <div className="flex items-center justify-center md:justify-start gap-2">
-                <span className="font-extrabold text-ink-900 dark:text-white font-sans text-xl sm:text-2xl tracking-tight">
-                  Launch Engine
-                </span>
-                <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-pill bg-accent-yellow text-ink-900 font-extrabold uppercase tracking-wider border border-ink-900">
-                  v1.0.0
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-ink-900 dark:text-gray-300 font-medium mt-0.5">
-                Deterministic 60fps Cinema Promo Video Engine for Web Applications
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-mono font-extrabold">
-            <span className="bg-white dark:bg-[#1f1c1a] text-ink-900 dark:text-white px-3 py-1.5 rounded-pill border-2 border-ink-900 dark:border-white/20 shadow-sm">
-              60 FPS Master
-            </span>
-            <span className="bg-white dark:bg-[#1f1c1a] text-ink-900 dark:text-white px-3 py-1.5 rounded-pill border-2 border-ink-900 dark:border-white/20 shadow-sm">
-              GPU Accelerated
-            </span>
-            <span className="bg-accent-green text-ink-900 px-3 py-1.5 rounded-pill border-2 border-ink-900 shadow-sm">
-              Zero Watermarks
-            </span>
-          </div>
+    <footer className="border-t border-line">
+      <div className="wrap flex flex-wrap justify-between gap-8 py-14">
+        <div>
+          <p
+            className="display text-base tracking-[0.02em]"
+            style={{ fontVariationSettings: "'wdth' 125, 'wght' 700" }}
+          >
+            LAUNCH
+          </p>
+          <p className="mt-3 max-w-[38ch] text-[0.82rem] text-muted">
+            Proprietary software. The films, posters and token files you render are yours, royalty
+            free and unwatermarked.
+          </p>
+          <p className="mt-2 text-[0.82rem] text-muted">
+            &copy; {year} Snurm. All rights reserved.
+          </p>
         </div>
 
-        {/* Proprietary Licence & Legal Notice Block */}
-        <div className="bg-white dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 rounded-2xl p-6 sm:p-8 shadow-hard dark:shadow-none space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-ink-900/10 dark:border-white/10 pb-4">
-            <div className="flex items-center gap-2.5 text-xs sm:text-sm font-mono font-extrabold text-ink-900 dark:text-white uppercase tracking-wider">
-              <ShieldCheck className="w-5 h-5 text-accent-pink flex-shrink-0" />
-              <span>Proprietary Software Licence & Copyright Notice</span>
-            </div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-extrabold text-accent-pink bg-accent-pink/10 px-3 py-1 rounded-pill self-start sm:self-auto">
-              <Lock className="w-3.5 h-3.5" />
-              <span>Commercial Licence</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm leading-relaxed text-ink-900 dark:text-gray-300 font-medium">
-            <div className="space-y-2">
-              <p className="font-bold text-ink-900 dark:text-white">
-                &copy; {new Date().getFullYear()} Launch Engine by Snurm. All Rights Reserved.
-              </p>
-              <p>
-                This software, its underlying rendering pipeline, motion choreography algorithms, style extraction routines, and associated assets are proprietary intellectual property.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <p className="font-bold text-ink-900 dark:text-white">
-                Usage & Legal Restrictions:
-              </p>
-              <p>
-                Unauthorised reproduction, public redistribution, sublicensing, or reverse engineering of the core source code is strictly prohibited without explicit written authorisation. Videos generated by licensed users remain 100% royalty-free and unwatermarked.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Credits & Documentation Trigger */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm font-mono font-bold text-ink-900 dark:text-gray-400 text-center sm:text-left pt-2">
-          <div>
-            Architected & Engineered by{' '}
-            <a
-              href="https://github.com/SadikMohamud"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ink-900 dark:text-white hover:text-accent-pink dark:hover:text-accent-pink font-extrabold underline underline-offset-4 transition-colors"
-            >
-              Snurm
-            </a>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {onOpenReadme && (
-              <button
-                onClick={onOpenReadme}
-                className="inline-flex items-center gap-1.5 text-accent-pink hover:text-ink-900 dark:hover:text-white font-extrabold underline underline-offset-4 transition-colors cursor-pointer"
+        <nav aria-label="Footer">
+          <ul className="flex flex-wrap gap-x-10 gap-y-3">
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="text-[0.82rem] text-muted transition-colors duration-signal ease-signal hover:text-ink"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a
+                href="https://github.com/SadikMohamud"
+                rel="noreferrer noopener"
+                target="_blank"
+                className="text-[0.82rem] text-muted transition-colors duration-signal ease-signal hover:text-ink"
               >
-                <BookOpen className="w-3.5 h-3.5" />
-                <span>Public Documentation / README</span>
-              </button>
-            )}
-            <span>&middot;</span>
-            <a
-              href="#install"
-              className="hover:text-accent-pink dark:hover:text-white transition-colors font-extrabold"
-            >
-              Install Guide
-            </a>
-          </div>
-        </div>
+                Snurm
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </footer>
   );

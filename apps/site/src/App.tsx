@@ -1,209 +1,100 @@
-import React, { useState, useEffect } from 'react';
+// The Launch landing page.
+//
+// The section order tells one story: what it does today, proof it does it,
+// how to get it, what is coming, and how to be told when it arrives.
+//
+// Smooth scroll is opt-in rather than default. It runs only on a fine
+// pointer and only when the visitor has not asked for reduced motion, and
+// the heavy background canvas is loaded lazily so it never sits on the
+// critical path.
+
+import React, { Suspense, lazy, useEffect } from 'react';
 import Lenis from 'lenis';
-import { HugeCanvas } from './mechanics/HugeCanvas.tsx';
-import { MagneticButton } from './mechanics/MagneticButton.tsx';
-import { CustomCursor } from './mechanics/CustomCursor.tsx';
-import { SplitReveal } from './mechanics/SplitReveal.tsx';
+
 import { Navbar } from './components/Navbar.tsx';
-import { MarqueeTicker } from './components/MarqueeTicker.tsx';
-import { VideoTheater } from './components/VideoTheater.tsx';
+import { HeroSection } from './components/HeroSection.tsx';
+import { ProofTheatre } from './components/ProofTheatre.tsx';
+import { HowItWorksSection } from './components/HowItWorksSection.tsx';
 import { InstallSection } from './components/InstallSection.tsx';
-import { FeaturesGrid } from './components/FeaturesGrid.tsx';
-import { WorkflowSection } from './components/WorkflowSection.tsx';
+import { CapabilityGrid } from './components/CapabilityGrid.tsx';
 import { CliSimulator } from './components/CliSimulator.tsx';
+import { PlatformSection } from './components/PlatformSection.tsx';
 import { FaqSection } from './components/FaqSection.tsx';
-import { CtaSection } from './components/CtaSection.tsx';
 import { Footer } from './components/Footer.tsx';
-import { ReadmeModal } from './components/ReadmeModal.tsx';
-import { Film, CheckCircle2, ArrowRight } from 'lucide-react';
+import { MarqueeTicker } from './components/MarqueeTicker.tsx';
+import { CustomCursor } from './mechanics/CustomCursor.tsx';
+import { usePrefersReducedMotion, useIsTouch } from './hooks/useMotion.ts';
+
+// The WebGL field is the single heaviest thing on the page, so it is split
+// into its own chunk and only requested once the rest has rendered.
+const HugeCanvas = lazy(() =>
+  import('./mechanics/HugeCanvas.tsx').then((module) => ({ default: module.HugeCanvas }))
+);
 
 export const App: React.FC = () => {
-  const [readmeOpen, setReadmeOpen] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
+  const isTouch = useIsTouch();
+
   useEffect(() => {
-    // Only initialize smooth scroll on non-touch devices or smooth mobile momentum
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouch) return;
+    // Touch platforms already have momentum scrolling of their own, and
+    // hijacking it makes a page feel worse rather than better. Reduced
+    // motion rules it out entirely.
+    if (isTouch || reducedMotion) return;
 
     const lenis = new Lenis({
       duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
       smoothWheel: true,
     });
 
-    let rafId: number;
-    function raf(time: number) {
+    let frame = 0;
+    const raf = (time: number) => {
       lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-
-    rafId = requestAnimationFrame(raf);
+      frame = requestAnimationFrame(raf);
+    };
+    frame = requestAnimationFrame(raf);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      cancelAnimationFrame(frame);
       lenis.destroy();
     };
-  }, []);
+  }, [isTouch, reducedMotion]);
 
-  const scrollToShowcase = () => {
-    document.getElementById('showcase')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const showAmbient = !reducedMotion && !isTouch;
 
   return (
-    <div className="relative min-h-screen bg-white dark:bg-[#0a0807] text-ink-900 dark:text-[#f8f6f5] flex flex-col justify-between selection:bg-accent-pink selection:text-white font-sans antialiased overflow-x-hidden w-full transition-colors duration-200">
-      {/* Custom Precision Follower Cursor (auto-disabled on touch) */}
-      <CustomCursor />
+    <div className="grain flex min-h-screen flex-col bg-canvas text-ink">
+      {/* Keyboard users get a way past the navigation. */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-ui focus:uppercase focus:text-accent-ink"
+      >
+        Skip to content
+      </a>
 
-      {/* Kinetic Background Color Particles */}
-      <HugeCanvas />
+      {showAmbient && <CustomCursor />}
 
-      {/* Main Studio Navbar with Mobile Menu */}
-      <Navbar onWatchClick={scrollToShowcase} onOpenReadme={() => setReadmeOpen(true)} />
+      {showAmbient && (
+        <Suspense fallback={null}>
+          <HugeCanvas />
+        </Suspense>
+      )}
 
-      {/* Main Content Area */}
-      <main className="space-y-16 sm:space-y-28 flex-grow w-full">
-        {/* Hero Section */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-20 space-y-6 sm:space-y-8">
-          {/* Status Badges */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-pill bg-accent-pink text-white font-mono text-[11px] sm:text-xs font-extrabold shadow-hard">
-              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-accent-yellow animate-ping" />
-              <span>Instant Web-to-Video Engine</span>
-            </div>
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-pill bg-accent-green text-ink-900 font-mono text-[11px] sm:text-xs font-extrabold border-2 border-ink-900 shadow-hard">
-              <span>60fps Deterministic Render</span>
-            </div>
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-pill bg-accent-yellow text-ink-900 font-mono text-[11px] sm:text-xs font-extrabold border-2 border-ink-900 shadow-hard">
-              <span>Zero Watermarks</span>
-            </div>
-          </div>
+      <Navbar />
 
-          {/* Headline and Lead */}
-          <div className="space-y-4 sm:space-y-6">
-            <SplitReveal
-              text="Turn Any Web Project Into A Cinema Promo Video."
-              as="h1"
-              className="display-huge text-ink-900 dark:text-white tracking-tight font-extrabold text-4xl sm:text-6xl lg:text-8xl"
-            />
-            <p className="text-lg sm:text-2xl text-ink-900 dark:text-[#dcd8d5] font-sans max-w-3xl font-bold leading-relaxed">
-              Generate unwatermarked 60fps promo videos directly from your local codebase or live URL. Extract computed design tokens and true motion physics in seconds.
-            </p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2 sm:pt-4">
-            <MagneticButton
-              onClick={scrollToShowcase}
-              className="w-full sm:w-auto bg-ink-900 dark:bg-white text-white dark:text-ink-900 px-6 sm:px-8 py-3.5 sm:py-4 rounded-pill font-mono text-sm sm:text-base font-extrabold hover:bg-accent-pink dark:hover:bg-accent-pink dark:hover:text-white shadow-hard flex items-center justify-center gap-2.5 sm:gap-3 transition-all hover:scale-105"
-            >
-              <Film className="w-4 h-4 sm:w-5 sm:h-5 text-accent-yellow" />
-              <span>Explore Video Showcase</span>
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-accent-green" />
-            </MagneticButton>
-
-            <a
-              href="#install"
-              className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-pill font-mono text-sm sm:text-base font-extrabold text-ink-900 dark:text-white bg-surface dark:bg-[#181412] hover:bg-white dark:hover:bg-[#24201d] border-2 border-ink-900 dark:border-white/20 transition-all shadow-hard text-center flex items-center justify-center"
-            >
-              $ /launch --help
-            </a>
-          </div>
-
-          {/* Performance Highlights Matrix */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-6 sm:pt-8 border-t-2 border-ink-900 dark:border-white/20 text-xs font-mono font-extrabold text-ink-900 dark:text-white">
-            <div className="flex items-center gap-3 bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 p-4 sm:p-5 rounded-2xl shadow-hard-pink">
-              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-accent-pink flex-shrink-0" />
-              <div>
-                <div className="text-base sm:text-lg font-extrabold text-ink-900 dark:text-white">Computed Design Tokens</div>
-                <div className="text-xs sm:text-sm text-ink-900 dark:text-[#dcd8d5] font-semibold mt-0.5">Extracts styles from real CSSOM</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 p-4 sm:p-5 rounded-2xl shadow-hard-green">
-              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-accent-green flex-shrink-0" />
-              <div>
-                <div className="text-base sm:text-lg font-extrabold text-ink-900 dark:text-white">Sub-Pixel Kinetic Physics</div>
-                <div className="text-xs sm:text-sm text-ink-900 dark:text-[#dcd8d5] font-semibold mt-0.5">Authentic cubic-bezier easing</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 bg-surface dark:bg-[#181412] border-2 border-ink-900 dark:border-white/20 p-4 sm:p-5 rounded-2xl shadow-hard-yellow">
-              <CheckCircle2 className="w-6 h-6 text-accent-yellow flex-shrink-0" />
-              <div>
-                <div className="text-base sm:text-lg font-extrabold text-ink-900 dark:text-white">60fps Delivery Master</div>
-                <div className="text-xs sm:text-sm text-ink-900 dark:text-[#dcd8d5] font-semibold mt-0.5">Baked frame 0 poster included</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Smooth Kinetic Marquee Ticker */}
+      <main id="main" className="flex-grow">
+        <HeroSection />
+        <ProofTheatre />
         <MarqueeTicker />
-
-        {/* Video Theater Showcase Section */}
-        <section id="showcase" className="max-w-6xl mx-auto px-4 sm:px-6 space-y-4 sm:space-y-6 scroll-mt-20">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3 border-b-2 border-ink-900 dark:border-white/20 pb-4 sm:pb-5">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-accent-pink text-white font-mono text-xs font-extrabold uppercase tracking-wider mb-2 shadow-hard">
-                Productions
-              </div>
-              <h2 className="display-medium text-ink-900 dark:text-white">
-                Showcase Video Theater
-              </h2>
-            </div>
-            <div className="text-xs sm:text-sm font-mono font-extrabold text-ink-900 dark:text-white bg-surface dark:bg-[#181412] px-3 py-1 sm:px-4 sm:py-1.5 rounded-pill border border-ink-900 dark:border-white/20 self-start sm:self-auto">
-              Select any production below to play in 4K / 60fps
-            </div>
-          </div>
-
-          <VideoTheater />
-        </section>
-
-        {/* Dedicated Installation & Setup Section */}
-        <section id="install" className="max-w-6xl mx-auto px-4 sm:px-6 scroll-mt-20">
-          <InstallSection />
-        </section>
-
-        {/* Engine Features Grid */}
-        <section id="features" className="max-w-6xl mx-auto px-4 sm:px-6 scroll-mt-20">
-          <FeaturesGrid />
-        </section>
-
-        {/* Workflow Section */}
-        <section id="workflow" className="max-w-6xl mx-auto px-4 sm:px-6 scroll-mt-20">
-          <WorkflowSection />
-        </section>
-
-        {/* CLI Simulator Section */}
-        <section id="cli" className="max-w-6xl mx-auto px-4 sm:px-6 space-y-4 sm:space-y-6 scroll-mt-20">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-accent-yellow text-ink-900 font-mono text-xs font-extrabold uppercase tracking-wider shadow-hard border-2 border-ink-900">
-              Terminal
-            </div>
-            <h2 className="display-medium text-ink-900 dark:text-white">
-              High-Precision Command Interface
-            </h2>
-            <p className="text-base sm:text-lg text-ink-900 dark:text-[#dcd8d5] font-sans max-w-xl font-bold">
-              Run against local repositories or public URLs to generate deliverables in seconds.
-            </p>
-          </div>
-
-          <CliSimulator />
-        </section>
-
-        {/* FAQ Section */}
-        <section id="faq" className="max-w-6xl mx-auto px-4 sm:px-6 scroll-mt-20">
-          <FaqSection />
-        </section>
-
-        {/* Call to Action */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <CtaSection onWatchClick={scrollToShowcase} />
-        </div>
+        <HowItWorksSection />
+        <InstallSection />
+        <CapabilityGrid />
+        <CliSimulator />
+        <PlatformSection />
+        <FaqSection />
       </main>
 
-      {/* Footer */}
-      <Footer onOpenReadme={() => setReadmeOpen(true)} />
-
-      {/* Public README & Documentation Modal */}
-      <ReadmeModal isOpen={readmeOpen} onClose={() => setReadmeOpen(false)} />
+      <Footer />
     </div>
   );
 };

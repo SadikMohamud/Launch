@@ -1,87 +1,76 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+// Frequently asked questions.
+//
+// Built on <details> and <summary> rather than a hand rolled accordion, so
+// it is keyboard operable, announced correctly by screen readers, and
+// findable with the browser's own find-in-page, none of which the previous
+// div based version managed.
 
-const faqs = [
+import React from 'react';
+import { Plus } from 'lucide-react';
+import { useReveal, staggerDelay } from '../hooks/useMotion.ts';
+
+const QUESTIONS = [
   {
-    q: 'How fast is a typical video render?',
-    a: 'Short promo videos (15 to 25 seconds) typically render in under 30 seconds on standard laptop hardware using our local GPU-accelerated Chromium renderer.'
+    question: 'Does it need FFmpeg installed?',
+    answer:
+      'No. A build ships with the engine. If you already have FFmpeg on your PATH it uses yours instead, and launch doctor tells you which one is in use.',
   },
   {
-    q: 'Are there any watermarks or platform attribution?',
-    a: 'Zero. Every file produced is 100% white-label and unwatermarked, delivered directly to your project directory ready for commercial deployment.'
+    question: 'Is the output watermarked?',
+    answer:
+      'Never. The films, posters and token files you render are yours, royalty free, with no attribution requirement.',
   },
   {
-    q: 'What video aspect ratios and resolutions are supported?',
-    a: 'Launch supports 16:9 Landscape (1920x1080 and 4K), 9:16 Vertical (1080x1920 for mobile reels and social channels), and 1:1 Square formats.'
+    question: 'How long does a render take?',
+    answer:
+      'About two minutes for a 20 second landscape film on a recent laptop, including the time spent capturing the site. Most of that is waiting for the page rather than rendering.',
   },
   {
-    q: 'Can Launch extract styles from a live website or a local repo?',
-    a: 'Both. Pass a local project folder to extract from the source code, or supply any public https URL to perform live DOM and CSSOM style capture.'
+    question: 'Does it work on a local project?',
+    answer:
+      'Yes. Point it at a folder and it detects the development server command, starts it, waits for the port, captures, then shuts the whole process tree down, including after Ctrl+C.',
   },
   {
-    q: 'How does the frame 0 poster engine work?',
-    a: 'The engine identifies the settled hero frame and bakes it into frame 0 of the MP4 using FFmpeg, ensuring instant visual loading without black flash.'
-  }
+    question: 'What happens to my site’s video and images?',
+    answer:
+      'They are downloaded to a temporary folder, used in the film, and the folder is deleted when the render finishes. Nothing is uploaded anywhere.',
+  },
+  {
+    question: 'Which operating systems are supported?',
+    answer:
+      'macOS, Windows and Ubuntu, on Node 22 or newer. The installer checks every dependency and prints the exact fix command for your platform.',
+  },
 ];
 
 export const FaqSection: React.FC = () => {
-  const [openIdx, setOpenIdx] = useState<number | null>(0);
-
-  const toggleFaq = (idx: number) => {
-    setOpenIdx(openIdx === idx ? null : idx);
-  };
+  const ref = useReveal<HTMLDivElement>(0.1);
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-2 border-ink-900 dark:border-white/20 pb-5">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-accent-yellow text-ink-900 font-mono text-xs font-extrabold uppercase tracking-wider mb-2 shadow-hard border-2 border-ink-900">
-            FAQ
-          </div>
-          <h2 className="display-medium text-ink-900 dark:text-white">
-            Frequently Asked Questions
-          </h2>
-        </div>
-        <p className="text-lg font-bold text-ink-900 dark:text-[#dcd8d5] font-sans max-w-md leading-relaxed">
-          Common questions about video generation, formats, and local pipeline rendering.
-        </p>
+    <section id="faq" className="wrap scroll-mt-24 py-section tint-signal">
+      <div className="flex flex-col gap-[1.1rem]">
+        <p className="eyebrow">Questions</p>
+        <h2 className="display max-w-prose text-display">Before you install.</h2>
+        <div className="rule-accent" />
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
-        {faqs.map((f, idx) => {
-          const isOpen = openIdx === idx;
-          return (
-            <div
-              key={idx}
-              className={`rounded-2xl border-2 transition-all duration-200 overflow-hidden ${
-                isOpen
-                  ? 'border-ink-900 dark:border-white/30 bg-surface dark:bg-[#181412] shadow-hard'
-                  : 'border-ink-900 dark:border-white/20 bg-white dark:bg-[#120f0e] hover:bg-surface dark:hover:bg-[#181412]'
-              }`}
-            >
-              <div
-                onClick={() => toggleFaq(idx)}
-                className="p-6 flex items-center justify-between gap-4 cursor-pointer select-none"
-              >
-                <h3 className="font-sans font-extrabold text-xl text-ink-900 dark:text-white">{f.q}</h3>
-                <button
-                  className={`w-9 h-9 rounded-pill border-2 border-ink-900 dark:border-white/20 flex items-center justify-center font-bold flex-shrink-0 transition-all ${
-                    isOpen ? 'bg-accent-pink text-white shadow-sm' : 'bg-white dark:bg-[#221e1d] text-ink-900 dark:text-white'
-                  }`}
-                >
-                  {isOpen ? <ChevronUp className="w-5 h-5 text-white" /> : <ChevronDown className="w-5 h-5" />}
-                </button>
-              </div>
-
-              {isOpen && (
-                <div className="px-6 pb-6 pt-3 text-ink-900 dark:text-[#dcd8d5] font-semibold leading-relaxed border-t-2 border-ink-900/15 dark:border-white/10 bg-white dark:bg-[#181412] text-base sm:text-lg">
-                  {f.a}
-                </div>
-              )}
-            </div>
-          );
-        })}
+      <div ref={ref} className="mt-14 border-t border-line">
+        {QUESTIONS.map((item, index) => (
+          <details
+            key={item.question}
+            className="reveal group border-b border-line"
+            style={{ transitionDelay: staggerDelay(index) }}
+          >
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-[1.05rem] font-medium [&::-webkit-details-marker]:hidden">
+              {item.question}
+              <Plus
+                aria-hidden="true"
+                className="h-4 w-4 flex-shrink-0 text-accent transition-transform duration-signal ease-signal group-open:rotate-45"
+              />
+            </summary>
+            <p className="max-w-prose pb-6 text-[0.9rem] text-muted">{item.answer}</p>
+          </details>
+        ))}
       </div>
-    </div>
+    </section>
   );
 };

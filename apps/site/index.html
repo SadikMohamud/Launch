@@ -1,23 +1,73 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!doctype html>
+<html lang="en-GB">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Launch · Instant Cinema Video Engine for Modern Web Projects</title>
-    <meta name="description" content="Generate unwatermarked 60fps cinema promo videos directly from your local codebase or live URL with computed design tokens and true motion physics." />
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Launch · Instant Cinema Video Engine for Web Projects" />
-    <meta property="og:description" content="Turn any web project into a cinema promo video in seconds. 60fps deterministic rendering." />
-    <meta property="og:image" content="/launch.jpg" />
-    <meta property="og:type" content="website" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Launch — turn any website into a promo film with one command</title>
+    <meta
+      name="description"
+      content="Launch is a command line engine that turns any website or local project into a finished promo film. It measures the site's real colours, type and motion, uses the site's own footage, and renders an unwatermarked MP4 on macOS, Windows and Ubuntu."
+    />
+    <link rel="canonical" href="https://launch.snurm.com/" />
+
+    <!-- The page is dark first, so the browser chrome is told before paint
+         rather than flashing white and then correcting itself. -->
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#000000" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- No font preload here on purpose. The typefaces are bundled by
+         Vite with content hashed names, so a hardcoded preload path would
+         404 on every visit and cost more than it saves. Vite emits the
+         font as a module preload from the stylesheet instead. -->
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Launch" />
+    <meta property="og:title" content="Launch — one command, one film" />
+    <meta
+      property="og:description"
+      content="Turn any website or local project into a finished promo film. Reads the site's real design tokens, uses its own footage, renders unwatermarked H.264."
+    />
+    <meta property="og:url" content="https://launch.snurm.com/" />
+    <meta property="og:image" content="https://launch.snurm.com/social-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A frame from a film rendered by Launch." />
+    <meta property="og:locale" content="en_GB" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Launch — one command, one film" />
+    <meta
+      name="twitter:description"
+      content="Turn any website or local project into a finished promo film. One command, no timeline to learn."
+    />
+    <meta name="twitter:image" content="https://launch.snurm.com/social-card.jpg" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Launch",
+        "applicationCategory": "MultimediaApplication",
+        "applicationSubCategory": "Video rendering",
+        "operatingSystem": "macOS, Windows, Ubuntu",
+        "softwareVersion": "1.0.0",
+        "url": "https://launch.snurm.com/",
+        "description": "A command line engine that turns any website or local project into a finished promo film, measuring the site's real design tokens and using its own footage.",
+        "softwareRequirements": "Node.js 22 or newer",
+        "author": {
+          "@type": "Organization",
+          "name": "Snurm",
+          "url": "https://github.com/SadikMohamud"
+        }
+      }
+    </script>
   </head>
-  <body class="bg-white text-[#0d0b0a] antialiased selection:bg-[#ff0090] selection:text-white">
+
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

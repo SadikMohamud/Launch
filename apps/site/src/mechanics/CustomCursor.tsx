@@ -1,101 +1,98 @@
-import React, { useEffect, useState } from 'react';
+// Trailing cursor ring.
+//
+// Studied: "Awwwards Pack/+19 Mouse Effect/6/code.zip" (files/script.js).
+// That component fills a full screen canvas with black, switches the context
+// to destination-out, and erases circles along the pointer path to reveal
+// the content beneath. Its useful trick is that it interpolates between the
+// previous and current pointer position using the pointer's own movementX
+// and movementY, so a fast flick still erases a continuous stroke instead of
+// leaving a dotted trail.
+//
+// What we took: that interpolation, and the habit of reading movement
+// deltas rather than assuming one event per frame.
+//
+// What we changed: no canvas, no compositing and no erase mask. Ours is a
+// single small ring element easing towards the pointer on our measured
+// curve, which costs one transform per frame instead of a full screen
+// repaint. It also never hides the system cursor, which the pack component
+// does; hiding it strands anyone navigating by keyboard or relying on the
+// operating system pointer.
+
+import React, { useEffect, useRef } from 'react';
+
+/** How quickly the ring closes on the pointer. Higher is snappier. */
+const FOLLOW = 0.18;
+
+/** Elements that make the ring grow, signalling that they are interactive. */
+const INTERACTIVE = 'a, button, summary, input, [role="tab"]';
 
 export const CustomCursor: React.FC = () => {
-  const [pos, setPos] = useState({ x: -100, y: -100 });
-  const [targetPos, setTargetPos] = useState({ x: -100, y: -100 });
-  const [isPointer, setIsPointer] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Only enable on non-touch devices
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouch) return;
+    const ring = ringRef.current;
+    if (!ring) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      setTargetPos({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+    let pointerX = window.innerWidth / 2;
+    let pointerY = window.innerHeight / 2;
+    let ringX = pointerX;
+    let ringY = pointerY;
+    let scale = 1;
+    let targetScale = 1;
+    let frame = 0;
+    let visible = false;
 
-      const target = e.target as HTMLElement | null;
-      if (target) {
-        const isInteractive = Boolean(
-          target.closest('button') ||
-          target.closest('a') ||
-          target.closest('.cursor-pointer') ||
-          target.closest('input') ||
-          target.getAttribute('role') === 'button' ||
-          target.closest('video')
-        );
-        setIsPointer(isInteractive);
+    const onMove = (event: PointerEvent) => {
+      // Mid-flick positions are taken from the movement deltas, so the ring
+      // tracks the real path rather than only the sampled endpoints.
+      const steps = Math.min(4, Math.round(Math.max(Math.abs(event.movementX), Math.abs(event.movementY)) / 40));
+      if (steps > 0) {
+        pointerX += (event.clientX - pointerX) / (steps + 1);
+        pointerY += (event.clientY - pointerY) / (steps + 1);
       }
+
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+
+      if (!visible) {
+        visible = true;
+        ring.style.opacity = '1';
+      }
+
+      targetScale = (event.target as Element | null)?.closest?.(INTERACTIVE) ? 2.1 : 1;
     };
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
+    const onLeave = () => {
+      visible = false;
+      ring.style.opacity = '0';
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
+    const tick = () => {
+      ringX += (pointerX - ringX) * FOLLOW;
+      ringY += (pointerY - ringY) * FOLLOW;
+      scale += (targetScale - scale) * FOLLOW;
+
+      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) scale(${scale.toFixed(3)})`;
+      frame = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener('pointermove', onMove, { passive: true });
+    document.addEventListener('pointerleave', onLeave);
+    frame = requestAnimationFrame(tick);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeave);
+      cancelAnimationFrame(frame);
+      window.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerleave', onLeave);
     };
-  }, [isVisible]);
-
-  useEffect(() => {
-    let animId: number;
-
-    const render = () => {
-      setPos((prev) => {
-        const dx = targetPos.x - prev.x;
-        const dy = targetPos.y - prev.y;
-        return {
-          x: prev.x + dx * 0.25,
-          y: prev.y + dy * 0.25,
-        };
-      });
-      animId = requestAnimationFrame(render);
-    };
-
-    animId = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(animId);
-  }, [targetPos]);
-
-  if (!isVisible) return null;
+  }, []);
 
   return (
-    <>
-      {/* Precision Core Dot */}
-      <div
-        className="fixed pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-opacity duration-150"
-        style={{
-          left: `${targetPos.x}px`,
-          top: `${targetPos.y}px`,
-        }}
-      >
-        <div
-          className={`rounded-full transition-all duration-150 ${
-            isPointer ? 'w-2.5 h-2.5 bg-accent-pink shadow-md' : 'w-2 h-2 bg-ink-900'
-          }`}
-        />
-      </div>
-
-      {/* Smooth Interpolated Ring (K95 Kinetic Follower) */}
-      <div
-        className="fixed pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-transform duration-200"
-        style={{
-          left: `${pos.x}px`,
-          top: `${pos.y}px`,
-        }}
-      >
-        <div
-          className={`rounded-full border-2 transition-all duration-300 ${
-            isPointer
-              ? 'w-14 h-14 border-accent-pink bg-accent-pink/15 scale-110 shadow-lg'
-              : 'w-8 h-8 border-ink-900/50'
-          }`}
-        />
-      </div>
-    </>
+    <div
+      ref={ringRef}
+      aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-[60] h-7 w-7 rounded-full border border-accent opacity-0 mix-blend-difference"
+      style={{ transition: 'opacity 200ms linear', willChange: 'transform' }}
+    />
   );
 };
