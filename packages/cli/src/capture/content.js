@@ -35,8 +35,28 @@ export function collectContentInPage() {
     return rect.width > 0 && rect.height > 0;
   }
 
-  /** The element's own text, ignoring text belonging to its children. */
+  /** Inline elements that are part of a phrase rather than a container. */
+  const INLINE = new Set(['SPAN', 'A', 'B', 'I', 'EM', 'STRONG', 'SMALL', 'SUP', 'SUB', 'MARK', 'BR']);
+
+  /**
+   * The text an element is responsible for.
+   *
+   * Taking only direct text nodes avoids counting a paragraph once for
+   * itself and again for every ancestor. But a headline is very often built
+   * from one span per word, and ignoring those children reduces
+   * "BAR | GRILL | RESTAURANT | LOUNGE" to "Bar | | Restaurant | Lounge",
+   * with the spanned words missing and the separators left behind.
+   *
+   * So an element whose element children are all inline phrasing is treated
+   * as one phrase and read whole. Anything containing a block child is
+   * still read as only its own text, because that element is a container.
+   */
   function ownText(element) {
+    const children = Array.from(element.children);
+    const phrasing = children.length > 0 && children.every((child) => INLINE.has(child.tagName));
+
+    if (phrasing) return clean(element.textContent);
+
     return clean(
       Array.from(element.childNodes)
         .filter((node) => node.nodeType === 3)
@@ -90,6 +110,11 @@ export function collectContentInPage() {
 
   const headlineCandidates = sizeable
     .filter((entry) => entry.top < heroZone)
+    // A button is not a proposition. "BOOK NOW" set large in a hero is a
+    // call to action, and using it as the headline makes the film open by
+    // shouting an instruction at someone who has not been told anything
+    // yet.
+    .filter((entry) => !CTA_WORDS.test(entry.text))
     .sort((a, b) => b.fontSize - a.fontSize || a.top - b.top);
 
   // If nothing large sits in the hero zone, fall back to the whole document
@@ -242,8 +267,18 @@ export function collectContentInPage() {
     if (logo) brand = clean(logo.alt);
   }
 
+  // A logo's alt text describes the image, so it routinely ends in the word
+  // "logo", "monogram" or "wordmark". Left in, the closing card reads "Work
+  // with Kalandula Logo".
+  const DESCRIPTOR =
+    /[\s|:-]+(logo|logotype|monogram|wordmark|word mark|brandmark|brand mark|icon|emblem|symbol)\.?$/i;
+
+  // Stripping to nothing would be worse than leaving it alone, so a value
+  // that is only a descriptor keeps whatever it had.
+  const brandName = brand.replace(DESCRIPTOR, '').trim() || brand;
+
   return {
-    brand,
+    brand: brandName,
     title: clean(document.title),
     headline: headline ? headline.text : '',
     statements,
