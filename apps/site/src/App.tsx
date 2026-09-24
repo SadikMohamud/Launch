@@ -17,6 +17,7 @@ import { Navbar } from './components/Navbar.tsx';
 import { HeroSection } from './components/HeroSection.tsx';
 import { ProofTheatre } from './components/ProofTheatre.tsx';
 import { PinnedProcess } from './components/PinnedProcess.tsx';
+import { ColourBand } from './components/ColourBand.tsx';
 import { InstallSection } from './components/InstallSection.tsx';
 import { CapabilityGrid } from './components/CapabilityGrid.tsx';
 import { CliSimulator } from './components/CliSimulator.tsx';
@@ -99,11 +100,27 @@ export const App: React.FC = () => {
       <main id="main" className="flex-grow">
         <HeroSection />
         <ProofTheatre />
+
+        <ColourBand
+          tint="film"
+          label="What you get"
+          drift="LAUNCH"
+          lines={['No timeline.', 'No watermark.', 'One command.']}
+        />
+
         <MarqueeTicker />
         <PinnedProcess />
         <InstallSection />
         <CapabilityGrid />
         <CliSimulator />
+
+        <ColourBand
+          tint="flare"
+          label="Coming next"
+          drift="PLATFORM"
+          lines={['Everything the engine does,', 'in your browser.']}
+        />
+
         <PlatformSection />
         <FaqSection />
       </main>
