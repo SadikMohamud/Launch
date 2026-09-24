@@ -5,6 +5,7 @@
 // that does not exist.
 
 import React from 'react';
+import { ScrollWordReveal } from '../mechanics/ScrollWordReveal.tsx';
 import { useReveal, staggerDelay } from '../hooks/useMotion.ts';
 
 const STAGES = [
@@ -35,7 +36,11 @@ export const HowItWorksSection: React.FC = () => {
     <section id="how" className="wrap scroll-mt-24 py-section tint-flare wash">
       <div className="flex flex-col gap-[1.1rem]">
         <p className="eyebrow">How it works</p>
-        <h2 className="display max-w-prose text-display">Three stages, no timeline to learn.</h2>
+        <ScrollWordReveal
+          as="h2"
+          className="display max-w-prose text-display"
+          text="Three stages, no timeline to learn."
+        />
         <div className="rule-accent" />
       </div>
 

@@ -8,6 +8,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize2 } from 'lucide-react';
+import { ScrollWordReveal } from '../mechanics/ScrollWordReveal.tsx';
 import { useReveal, staggerDelay } from '../hooks/useMotion.ts';
 
 export interface ProofFilm {
@@ -205,7 +206,11 @@ export const ProofTheatre: React.FC = () => {
     <section id="proof" className="wrap scroll-mt-24 py-section tint-signal wash">
       <div className="flex flex-col gap-[1.1rem]">
         <p className="eyebrow">Proof</p>
-        <h2 className="display max-w-prose text-display">Three films, one command each.</h2>
+        <ScrollWordReveal
+          as="h2"
+          className="display max-w-prose text-display"
+          text="Three films, one command each."
+        />
         <div className="rule-accent" />
       </div>
 

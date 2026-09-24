@@ -10,6 +10,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { Check, Copy } from 'lucide-react';
+import { ScrollWordReveal } from '../mechanics/ScrollWordReveal.tsx';
 import { useReveal } from '../hooks/useMotion.ts';
 
 interface Platform {
@@ -78,7 +79,11 @@ export const InstallSection: React.FC = () => {
     <section id="install" className="wrap scroll-mt-24 py-section tint-signal">
       <div className="flex flex-col gap-[1.1rem]">
         <p className="eyebrow">Install</p>
-        <h2 className="display max-w-prose text-display">Two lines, then a film.</h2>
+        <ScrollWordReveal
+          as="h2"
+          className="display max-w-prose text-display"
+          text="Two lines, then a film."
+        />
         <div className="rule-accent" />
       </div>
 

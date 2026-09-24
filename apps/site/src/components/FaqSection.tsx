@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { Plus } from 'lucide-react';
+import { ScrollWordReveal } from '../mechanics/ScrollWordReveal.tsx';
 import { useReveal, staggerDelay } from '../hooks/useMotion.ts';
 
 const QUESTIONS = [
@@ -49,7 +50,11 @@ export const FaqSection: React.FC = () => {
     <section id="faq" className="wrap scroll-mt-24 py-section tint-signal">
       <div className="flex flex-col gap-[1.1rem]">
         <p className="eyebrow">Questions</p>
-        <h2 className="display max-w-prose text-display">Before you install.</h2>
+        <ScrollWordReveal
+          as="h2"
+          className="display max-w-prose text-display"
+          text="Before you install."
+        />
         <div className="rule-accent" />
       </div>
 

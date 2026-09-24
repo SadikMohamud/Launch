@@ -6,6 +6,7 @@
 // required to agree.
 
 import React from 'react';
+import { ScrollWordReveal } from '../mechanics/ScrollWordReveal.tsx';
 import { useReveal, staggerDelay } from '../hooks/useMotion.ts';
 
 interface Capability {
@@ -54,7 +55,11 @@ export const CapabilityGrid: React.FC = () => {
     <section id="capabilities" className="wrap scroll-mt-24 py-section tint-film wash">
       <div className="flex flex-col gap-[1.1rem]">
         <p className="eyebrow">Flags</p>
-        <h2 className="display max-w-prose text-display">Everything it ships with.</h2>
+        <ScrollWordReveal
+          as="h2"
+          className="display max-w-prose text-display"
+          text="Everything it ships with."
+        />
         <div className="rule-accent" />
       </div>
 

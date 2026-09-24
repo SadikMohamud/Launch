@@ -9,6 +9,7 @@
 // than edited to look right.
 
 import React, { useEffect, useRef, useState } from 'react';
+import { ScrollWordReveal } from '../mechanics/ScrollWordReveal.tsx';
 import { usePrefersReducedMotion, useReveal } from '../hooks/useMotion.ts';
 
 type Line = { kind: 'command' | 'stage' | 'note' | 'result'; text: string };
@@ -78,7 +79,11 @@ export const CliSimulator: React.FC = () => {
     <section id="cli" className="wrap scroll-mt-24 py-section tint-flare">
       <div className="flex flex-col gap-[1.1rem]">
         <p className="eyebrow">Terminal</p>
-        <h2 className="display max-w-prose text-display">What a run looks like.</h2>
+        <ScrollWordReveal
+          as="h2"
+          className="display max-w-prose text-display"
+          text="What a run looks like."
+        />
         <div className="rule-accent" />
       </div>
 

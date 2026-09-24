@@ -230,6 +230,78 @@ body {
     color: transparent;
   }
 
+
+  /* Scroll scrubbed word reveal.
+   *
+   * The measured behaviour from k95.it (MiMic 220): words resolve as the
+   * block crosses roughly the middle of the viewport, over about 1.3vh, on
+   * an out-strong curve. Where the browser supports a view timeline the
+   * scrub is native and costs no JavaScript per frame; elsewhere the
+   * .words-in class from an IntersectionObserver plays it once.
+   */
+  .word-reveal__wrap {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+
+  .word-reveal__word {
+    display: inline-block;
+    opacity: 0.12;
+    transform: translateY(0.34em);
+    will-change: transform, opacity;
+  }
+
+  /* One shot fallback. */
+  .word-reveal.words-in .word-reveal__word {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 350ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--word-index) * 28ms);
+  }
+
+  @supports (animation-timeline: view()) {
+    .word-reveal--scrub .word-reveal__word {
+      animation: word-resolve linear both;
+      animation-timeline: view();
+      /* Begin as the block enters the lower half and finish before it
+         leaves the middle, which is the 1.3vh window k95 scrubs over. */
+      animation-range: entry 18% cover 46%;
+      /* Each word starts a little later than the last, expressed as a
+         share of the range so the stagger survives any scroll speed. */
+      animation-delay: calc(var(--word-index) / var(--word-total) * -0.0001s);
+    }
+
+    /* The stagger is carried by a per word range offset rather than a
+       delay, because a delay on a scroll timeline is ignored. */
+    .word-reveal--scrub .word-reveal__wrap:nth-child(n) .word-reveal__word {
+      animation-range: calc(entry 14% + (var(--word-index) * 1.1%)) cover 44%;
+    }
+  }
+
+  @keyframes word-resolve {
+    from {
+      opacity: 0.12;
+      transform: translateY(0.34em);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .word-reveal__word {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+  }
+
   .reveal {
     opacity: 0;
     transform: translateY(18px);
