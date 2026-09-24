@@ -8,30 +8,33 @@
 // the heavy background canvas is loaded lazily so it never sits on the
 // critical path.
 
-import React, { Suspense, lazy, useEffect } from 'react';
-import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { Suspense, lazy, useEffect } from "react";
+import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { Navbar } from './components/Navbar.tsx';
-import { HeroSection } from './components/HeroSection.tsx';
-import { ProofTheatre } from './components/ProofTheatre.tsx';
-import { PinnedProcess } from './components/PinnedProcess.tsx';
-import { ColourBand } from './components/ColourBand.tsx';
-import { InstallSection } from './components/InstallSection.tsx';
-import { CapabilityGrid } from './components/CapabilityGrid.tsx';
-import { CliSimulator } from './components/CliSimulator.tsx';
-import { PlatformSection } from './components/PlatformSection.tsx';
-import { FaqSection } from './components/FaqSection.tsx';
-import { Footer } from './components/Footer.tsx';
-import { MarqueeTicker } from './components/MarqueeTicker.tsx';
-import { CustomCursor } from './mechanics/CustomCursor.tsx';
-import { usePrefersReducedMotion, useIsTouch } from './hooks/useMotion.ts';
+import { Navbar } from "./components/Navbar.tsx";
+import { HeroSection } from "./components/HeroSection.tsx";
+import { ProofTheatre } from "./components/ProofTheatre.tsx";
+import { PinnedProcess } from "./components/PinnedProcess.tsx";
+import { ColourBand } from "./components/ColourBand.tsx";
+import { InstallSection } from "./components/InstallSection.tsx";
+import { CapabilityGrid } from "./components/CapabilityGrid.tsx";
+import { CliSimulator } from "./components/CliSimulator.tsx";
+import { PlatformSection } from "./components/PlatformSection.tsx";
+import { FaqSection } from "./components/FaqSection.tsx";
+import { Footer } from "./components/Footer.tsx";
+import { MarqueeTicker } from "./components/MarqueeTicker.tsx";
+import { CustomCursor } from "./mechanics/CustomCursor.tsx";
+import { usePrefersReducedMotion, useIsTouch } from "./hooks/useMotion.ts";
+import { SectionTransitionProvider } from "./mechanics/SectionTransition.tsx";
 
 // The WebGL field is the single heaviest thing on the page, so it is split
 // into its own chunk and only requested once the rest has rendered.
 const HugeCanvas = lazy(() =>
-  import('./mechanics/HugeCanvas.tsx').then((module) => ({ default: module.HugeCanvas }))
+  import("./mechanics/HugeCanvas.tsx").then((module) => ({
+    default: module.HugeCanvas,
+  })),
 );
 
 export const App: React.FC = () => {
@@ -55,7 +58,7 @@ export const App: React.FC = () => {
     // scroll value that Lenis has already moved away from, and the pin
     // drifts by however far the smoothing is behind.
     gsap.registerPlugin(ScrollTrigger);
-    lenis.on('scroll', ScrollTrigger.update);
+    lenis.on("scroll", ScrollTrigger.update);
 
     let frame = 0;
     const raf = (time: number) => {
@@ -70,7 +73,7 @@ export const App: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(frame);
-      lenis.off('scroll', ScrollTrigger.update);
+      lenis.off("scroll", ScrollTrigger.update);
       lenis.destroy();
     };
   }, [isTouch, reducedMotion]);
@@ -78,54 +81,56 @@ export const App: React.FC = () => {
   const showAmbient = !reducedMotion && !isTouch;
 
   return (
-    <div className="grain flex min-h-screen flex-col bg-canvas text-ink">
-      {/* Keyboard users get a way past the navigation. */}
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-ui focus:uppercase focus:text-accent-ink"
-      >
-        Skip to content
-      </a>
+    <SectionTransitionProvider>
+      <div className="grain flex min-h-screen flex-col bg-canvas text-ink">
+        {/* Keyboard users get a way past the navigation. */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-ui focus:uppercase focus:text-accent-ink"
+        >
+          Skip to content
+        </a>
 
-      {showAmbient && <CustomCursor />}
+        {showAmbient && <CustomCursor />}
 
-      {showAmbient && (
-        <Suspense fallback={null}>
-          <HugeCanvas />
-        </Suspense>
-      )}
+        {showAmbient && (
+          <Suspense fallback={null}>
+            <HugeCanvas />
+          </Suspense>
+        )}
 
-      <Navbar />
+        <Navbar />
 
-      <main id="main" className="flex-grow">
-        <HeroSection />
-        <ProofTheatre />
+        <main id="main" className="flex-grow">
+          <HeroSection />
+          <ProofTheatre />
 
-        <ColourBand
-          tint="film"
-          label="What you get"
-          drift="LAUNCH"
-          lines={['No timeline.', 'No watermark.', 'One command.']}
-        />
+          <ColourBand
+            tint="film"
+            label="What you get"
+            drift="LAUNCH"
+            lines={["No timeline.", "No watermark.", "One command."]}
+          />
 
-        <MarqueeTicker />
-        <PinnedProcess />
-        <InstallSection />
-        <CapabilityGrid />
-        <CliSimulator />
+          <MarqueeTicker />
+          <PinnedProcess />
+          <InstallSection />
+          <CapabilityGrid />
+          <CliSimulator />
 
-        <ColourBand
-          tint="flare"
-          label="Coming next"
-          drift="PLATFORM"
-          lines={['Everything the engine does,', 'in your browser.']}
-        />
+          <ColourBand
+            tint="flare"
+            label="Coming next"
+            drift="PLATFORM"
+            lines={["Everything the engine does,", "in your browser."]}
+          />
 
-        <PlatformSection />
-        <FaqSection />
-      </main>
+          <PlatformSection />
+          <FaqSection />
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </SectionTransitionProvider>
   );
 };
