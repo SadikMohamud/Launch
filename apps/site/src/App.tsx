@@ -10,11 +10,13 @@
 
 import React, { Suspense, lazy, useEffect } from 'react';
 import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { Navbar } from './components/Navbar.tsx';
 import { HeroSection } from './components/HeroSection.tsx';
 import { ProofTheatre } from './components/ProofTheatre.tsx';
-import { HowItWorksSection } from './components/HowItWorksSection.tsx';
+import { PinnedProcess } from './components/PinnedProcess.tsx';
 import { InstallSection } from './components/InstallSection.tsx';
 import { CapabilityGrid } from './components/CapabilityGrid.tsx';
 import { CliSimulator } from './components/CliSimulator.tsx';
@@ -47,6 +49,13 @@ export const App: React.FC = () => {
       smoothWheel: true,
     });
 
+    // Lenis owns the scroll position, so ScrollTrigger has to be updated
+    // from it. Without this a pinned section measures against the native
+    // scroll value that Lenis has already moved away from, and the pin
+    // drifts by however far the smoothing is behind.
+    gsap.registerPlugin(ScrollTrigger);
+    lenis.on('scroll', ScrollTrigger.update);
+
     let frame = 0;
     const raf = (time: number) => {
       lenis.raf(time);
@@ -54,8 +63,13 @@ export const App: React.FC = () => {
     };
     frame = requestAnimationFrame(raf);
 
+    // A pin measured before the fonts land is measured against the wrong
+    // height, so the trigger is refreshed once they have settled.
+    document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => {});
+
     return () => {
       cancelAnimationFrame(frame);
+      lenis.off('scroll', ScrollTrigger.update);
       lenis.destroy();
     };
   }, [isTouch, reducedMotion]);
@@ -86,7 +100,7 @@ export const App: React.FC = () => {
         <HeroSection />
         <ProofTheatre />
         <MarqueeTicker />
-        <HowItWorksSection />
+        <PinnedProcess />
         <InstallSection />
         <CapabilityGrid />
         <CliSimulator />
